@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class CreateTestCommand {
+public class CreateTestModelCommand {
 
     private final String phrase;
 

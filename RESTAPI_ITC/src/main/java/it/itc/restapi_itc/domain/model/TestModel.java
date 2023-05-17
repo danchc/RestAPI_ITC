@@ -16,6 +16,6 @@ import lombok.Setter;
 public class TestModel {
 
     private final TestId testId;
-    private final String phrase;
+    private String phrase;
 
 }

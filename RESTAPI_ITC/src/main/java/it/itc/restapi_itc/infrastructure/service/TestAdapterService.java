@@ -1,7 +1,9 @@
 package it.itc.restapi_itc.infrastructure.service;
 
 import it.itc.restapi_itc.application.port.out.CreateTestModelPortOut;
+import it.itc.restapi_itc.application.port.out.DeleteTestModelPortOut;
 import it.itc.restapi_itc.application.port.out.GetTestModelPortOut;
+import it.itc.restapi_itc.application.port.out.UpdateTestModelPortOut;
 import it.itc.restapi_itc.domain.model.TestId;
 import it.itc.restapi_itc.domain.model.TestModel;
 import it.itc.restapi_itc.infrastructure.entity.TestEntity;
@@ -15,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TestAdapterService implements CreateTestModelPortOut, GetTestModelPortOut {
+public class TestAdapterService implements CreateTestModelPortOut, GetTestModelPortOut, DeleteTestModelPortOut, UpdateTestModelPortOut {
 
     private final TestJpaRepository testJpaRepository;
 
@@ -37,5 +39,17 @@ public class TestAdapterService implements CreateTestModelPortOut, GetTestModelP
     @Transactional
     public Optional<TestModel> findById(TestId testId) {
        return testJpaRepository.findById(testId.getTestId()).map(testMapper::fromEntityToModel);
+    }
+
+    @Override
+    public void deleteById(TestId testId){
+        testJpaRepository.deleteById(testId.getTestId());
+    }
+
+    @Override
+    @Transactional
+    public TestModel updateById(TestModel testModel) {
+        testJpaRepository.save(testMapper.fromModelToEntity(testModel));
+        return testModel;
     }
 }

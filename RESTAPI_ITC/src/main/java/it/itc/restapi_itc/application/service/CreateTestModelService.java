@@ -1,6 +1,6 @@
 package it.itc.restapi_itc.application.service;
 
-import it.itc.restapi_itc.application.command.CreateTestCommand;
+import it.itc.restapi_itc.application.command.CreateTestModelCommand;
 import it.itc.restapi_itc.application.port.in.CreateTestModelUseCase;
 import it.itc.restapi_itc.application.port.out.CreateTestModelPortOut;
 import it.itc.restapi_itc.domain.model.TestModel;
@@ -19,9 +19,9 @@ public class CreateTestModelService implements CreateTestModelUseCase {
     private TestMapper testMapper = new TestMapper();
 
     @Override
-    public TestModel createTestModel(CreateTestCommand createTestCommand) {
+    public TestModel createTestModel(CreateTestModelCommand createTestModelCommand) {
         log.info("#### CREATING TESTMODEL ####");
-        TestModel testModel = this.testMapper.fromCommandToModel(createTestCommand);
+        TestModel testModel = this.testMapper.fromCommandToModel(createTestModelCommand);
         log.debug("#### TESTMODEL CREATED {} ####", testModel);
         return createTestModelPortOut.persist(testModel);
     }
