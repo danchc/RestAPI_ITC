@@ -103,13 +103,11 @@ public class TestController {
         log.info("#### UPDATING TESTMODEL ####");
         log.debug("#### REQUESTED TO UPDATE TESTMODEL {}", testModelId);
 
-        TestModel testModel = updateTestModelUseCase.updateTestModel(
-         new UpdateTestModelCommand(
-                 new TestId(testModelId),
-                 testRequest.getPhrase()
-         ));
-
-        return new ResponseEntity<TestResponse>(testMapper.fromModelToResponse(testModel), HttpStatus.CREATED);
+        return new ResponseEntity<TestResponse>(testMapper.fromModelToResponse(updateTestModelUseCase.updateTestModel(
+                new UpdateTestModelCommand(
+                        new TestId(testModelId),
+                        testRequest.getPhrase()
+                ))), HttpStatus.CREATED);
     }
 
 

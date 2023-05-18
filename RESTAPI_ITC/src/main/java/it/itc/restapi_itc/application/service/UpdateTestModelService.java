@@ -21,6 +21,7 @@ public class UpdateTestModelService implements UpdateTestModelUseCase {
     public TestModel updateTestModel(UpdateTestModelCommand updateTestModelCommand) {
         log.info("### UPDATING TESTMODEL ###");
 
+
         return getTestModelPortOut.findById(updateTestModelCommand.getTestId()).map(
                 testModel -> {
                     testModel.setPhrase(updateTestModelCommand.getPhrase());

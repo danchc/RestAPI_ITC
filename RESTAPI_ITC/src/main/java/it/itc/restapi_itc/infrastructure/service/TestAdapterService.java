@@ -6,12 +6,11 @@ import it.itc.restapi_itc.application.port.out.GetTestModelPortOut;
 import it.itc.restapi_itc.application.port.out.UpdateTestModelPortOut;
 import it.itc.restapi_itc.domain.model.TestId;
 import it.itc.restapi_itc.domain.model.TestModel;
-import it.itc.restapi_itc.infrastructure.entity.TestEntity;
 import it.itc.restapi_itc.infrastructure.jpa.TestJpaRepository;
 import it.itc.restapi_itc.infrastructure.jpa.mapper.TestMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -36,7 +35,7 @@ public class TestAdapterService implements CreateTestModelPortOut, GetTestModelP
 
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<TestModel> findById(TestId testId) {
        return testJpaRepository.findById(testId.getTestId()).map(testMapper::fromEntityToModel);
     }
