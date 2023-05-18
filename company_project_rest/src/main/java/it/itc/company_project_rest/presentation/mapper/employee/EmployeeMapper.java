@@ -23,7 +23,8 @@ public class EmployeeMapper {
                 employeeModel.getName(),
                 employeeModel.getSurname(),
                 employeeModel.getEmail(),
-                employeeModel.getDepartmentModel()
+                employeeModel.getDepartmentModel(),
+                employeeModel.getProjectModelList()
         );
     }
 }

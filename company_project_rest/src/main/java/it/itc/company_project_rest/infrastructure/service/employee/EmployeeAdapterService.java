@@ -2,6 +2,7 @@ package it.itc.company_project_rest.infrastructure.service.employee;
 
 import it.itc.company_project_rest.application.port.out.employee.CreateEmployeeModelPortOut;
 import it.itc.company_project_rest.application.port.out.employee.GetEmployeeModelPortOut;
+import it.itc.company_project_rest.application.port.out.employee.UpdateEmployeeModelPortOut;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut {
+public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut {
 
     private final EmployeeJpaRepository employeeJpaRepository;
     private EmployeeMapper employeeMapper = new EmployeeMapper();

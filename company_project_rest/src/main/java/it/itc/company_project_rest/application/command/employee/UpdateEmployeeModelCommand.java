@@ -1,18 +1,15 @@
-package it.itc.company_project_rest.presentation.request.employee;
+package it.itc.company_project_rest.application.command.employee;
 
 import it.itc.company_project_rest.domain.model.department.DepartmentId;
-import it.itc.company_project_rest.domain.model.department.DepartmentModel;
+import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class EmployeeRequest {
+public class UpdateEmployeeModelCommand {
 
+    private EmployeeId employeeId;
     private String name;
     private String surname;
     private String email;
