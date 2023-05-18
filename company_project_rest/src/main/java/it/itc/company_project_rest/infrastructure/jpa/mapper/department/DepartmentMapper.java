@@ -21,7 +21,7 @@ public class DepartmentMapper {
     }
 
     /* fromEntityToModel */
-    public DepartmentModel fromModelToEntity(DepartmentEntity departmentEntity) {
+    public DepartmentModel fromEntityToModel(DepartmentEntity departmentEntity) {
         return new DepartmentModel(
                 new DepartmentId(departmentEntity.getDepartmentId()),
                 departmentEntity.getName()

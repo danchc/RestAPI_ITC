@@ -4,8 +4,14 @@ import it.itc.company_project_rest.application.command.project.CreateProjectMode
 import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import org.springframework.stereotype.Repository;
 
+/*
+
+    Interface for ProjectModel CREATE Use Case
+
+ */
+
 @Repository
 public interface CreateProjectModelUseCase {
 
-    ProjectModel persist(CreateProjectModelCommand createProjectModelCommand);
+    ProjectModel createProjectModel(CreateProjectModelCommand createProjectModelCommand);
 }

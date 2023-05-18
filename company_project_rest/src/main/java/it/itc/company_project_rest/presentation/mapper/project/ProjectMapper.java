@@ -1,7 +1,9 @@
 package it.itc.company_project_rest.presentation.mapper.project;
 
 import it.itc.company_project_rest.application.command.project.CreateProjectModelCommand;
+import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import it.itc.company_project_rest.presentation.request.project.ProjectRequest;
+import it.itc.company_project_rest.presentation.response.project.ProjectResponse;
 
 /*
 
@@ -20,6 +22,12 @@ public class ProjectMapper {
     }
 
     /* fromModelToResponse */
-
+    public ProjectResponse fromModelToResponse(ProjectModel projectModel){
+        return new ProjectResponse(
+                projectModel.getName(),
+                projectModel.getStartDate(),
+                projectModel.getEndDate()
+        );
+    }
 
 }
