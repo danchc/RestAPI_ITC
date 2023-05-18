@@ -1,6 +1,8 @@
 package it.itc.company_project_rest.infrastructure.service.department;
 
 import it.itc.company_project_rest.application.port.out.department.CreateDepartmentModelPortOut;
+import it.itc.company_project_rest.application.port.out.department.GetDepartmentModelPortOut;
+import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
 import it.itc.company_project_rest.infrastructure.jpa.department.DepartmentJpaRepository;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
@@ -8,9 +10,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
-public class DepartmentAdapterService implements CreateDepartmentModelPortOut {
+public class DepartmentAdapterService implements CreateDepartmentModelPortOut, GetDepartmentModelPortOut {
 
     private final DepartmentJpaRepository departmentJpaRepository;
 
@@ -25,5 +29,12 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut {
         );
 
         return departmentModel;
+    }
+
+    @Override
+    public Optional<DepartmentModel> retrieveById(DepartmentId departmentId) {
+        return this.departmentJpaRepository.findById(
+                departmentId.getDepartmentId()
+        ).map(departmentMapper::fromEntityToModel);
     }
 }

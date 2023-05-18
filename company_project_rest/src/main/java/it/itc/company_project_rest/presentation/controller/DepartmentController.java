@@ -1,7 +1,10 @@
 package it.itc.company_project_rest.presentation.controller;
 
 import it.itc.company_project_rest.application.command.department.CreateDepartmentModelCommand;
+import it.itc.company_project_rest.application.command.department.GetDepartmentModelCommand;
 import it.itc.company_project_rest.application.port.in.department.CreateDepartmentModelUseCase;
+import it.itc.company_project_rest.application.port.in.department.GetDepartmentModelUseCase;
+import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
 import it.itc.company_project_rest.presentation.mapper.department.DepartmentMapper;
 import it.itc.company_project_rest.presentation.request.department.DepartmentRequest;
@@ -10,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.UUID;
 
 /*
 
@@ -29,6 +32,7 @@ public class DepartmentController {
 
     /* casi d'uso */
     private final CreateDepartmentModelUseCase createDepartmentModelUseCase;
+    private final GetDepartmentModelUseCase getDepartmentModelUseCase;
 
     private DepartmentMapper departmentMapper = new DepartmentMapper();
 
@@ -48,6 +52,27 @@ public class DepartmentController {
 
 
     /* GET METHOD */
+    @GetMapping("/{departmentId}")
+    public ResponseEntity<DepartmentResponse> getDepartmentModel(@PathVariable UUID departmentId) {
+        log.info("#### Retrieving Department ####");
+        log.debug("#### Requested to retrieving {}",departmentId);
+
+        /* create command */
+        GetDepartmentModelCommand getDepartmentModelCommand =
+                new GetDepartmentModelCommand(
+                        new DepartmentId(departmentId)
+                );
+
+        Optional<DepartmentResponse> departmentResponse =
+                getDepartmentModelUseCase.getDepartmentModel(getDepartmentModelCommand).map(departmentMapper::fromModelToResponse);
+
+        if(departmentResponse.isPresent()){
+            return ResponseEntity.ok(departmentResponse.get());
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
     /* DELETE METHOD */
 
