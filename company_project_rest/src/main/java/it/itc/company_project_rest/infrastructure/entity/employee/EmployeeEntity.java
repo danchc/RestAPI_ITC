@@ -14,7 +14,6 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "employee")
-@AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeEntity {
 
@@ -31,5 +30,15 @@ public class EmployeeEntity {
 
     @OneToMany
     private List<ProjectEntity> projectEntityList;
+
+    @Builder
+    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, List<ProjectEntity> projectEntityList){
+        this.employeeId = employeeId;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.departmentEntity = departmentEntity;
+        this.projectEntityList = projectEntityList;
+    }
 
 }

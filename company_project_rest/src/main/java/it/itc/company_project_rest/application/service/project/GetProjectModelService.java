@@ -18,8 +18,6 @@ public class GetProjectModelService implements GetProjectModelUseCase {
 
     private final GetProjectModelPortOut getProjectModelPortOut;
 
-    private final ProjectMapper projectMapper = new ProjectMapper();
-
     @Override
     public Optional<ProjectModel> retrieveProjectModel(GetProjectModelCommand getProjectModelCommand) {
         log.info("#### Retrieving ProjectModel #####");
