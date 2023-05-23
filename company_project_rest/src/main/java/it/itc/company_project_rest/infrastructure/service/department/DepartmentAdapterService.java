@@ -2,20 +2,26 @@ package it.itc.company_project_rest.infrastructure.service.department;
 
 import it.itc.company_project_rest.application.port.out.department.CreateDepartmentModelPortOut;
 import it.itc.company_project_rest.application.port.out.department.DeleteDepartmentModelPortOut;
+import it.itc.company_project_rest.application.port.out.department.GetAllDepartmentModelPortOut;
 import it.itc.company_project_rest.application.port.out.department.GetDepartmentModelPortOut;
 import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
+import it.itc.company_project_rest.infrastructure.entity.department.DepartmentEntity;
 import it.itc.company_project_rest.infrastructure.jpa.department.DepartmentJpaRepository;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class DepartmentAdapterService implements CreateDepartmentModelPortOut, GetDepartmentModelPortOut, DeleteDepartmentModelPortOut {
+public class DepartmentAdapterService implements CreateDepartmentModelPortOut, GetDepartmentModelPortOut, DeleteDepartmentModelPortOut, GetAllDepartmentModelPortOut {
 
     private final DepartmentJpaRepository departmentJpaRepository;
 
@@ -45,5 +51,16 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
         this.departmentJpaRepository.deleteById(
                 departmentId.getDepartmentId()
         );
+    }
+
+    @Override
+    public Page<DepartmentModel> findAll(Pageable pageable) {
+        Page<DepartmentEntity> departmentEntities =
+                this.departmentJpaRepository.fetchAllDepartment(pageable);
+
+        List<DepartmentModel> departmentModels =
+                departmentEntities.stream().map(departmentMapper::fromEntityToModel).toList();
+
+        return new PageImpl<>(departmentModels, pageable, departmentEntities.getTotalElements());
     }
 }

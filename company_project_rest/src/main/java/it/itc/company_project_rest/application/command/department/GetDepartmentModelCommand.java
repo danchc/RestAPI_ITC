@@ -4,6 +4,11 @@ import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/*
+
+    Command for Retrieve  DepartmentModel by ID
+
+ */
 @Getter
 @AllArgsConstructor
 public class GetDepartmentModelCommand {

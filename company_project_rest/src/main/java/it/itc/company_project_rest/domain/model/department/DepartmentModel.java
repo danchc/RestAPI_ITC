@@ -11,7 +11,7 @@ import lombok.Setter;
 public class DepartmentModel {
 
     /* fields */
-    private DepartmentId departmentId;
+    private final DepartmentId departmentId;
     private String name;
 
     public DepartmentModel(DepartmentId departmentId, String name){

@@ -5,6 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/*
+
+    Command for Delete DepartmentModel by ID
+
+ */
+
 @Getter
 @AllArgsConstructor
 public class DeleteDepartmentModelCommand {

@@ -8,6 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/*
+
+    Command for Update EmployeeModel with DepartmentModel
+
+ */
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

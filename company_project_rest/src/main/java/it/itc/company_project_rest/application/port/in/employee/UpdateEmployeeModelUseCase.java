@@ -6,6 +6,12 @@ import it.itc.company_project_rest.application.command.employee.UpdateProjectLis
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import org.springframework.stereotype.Repository;
 
+/*
+
+    Interface for EmployeeModel UPDATE Use Case
+
+ */
+
 @Repository
 public interface UpdateEmployeeModelUseCase {
 

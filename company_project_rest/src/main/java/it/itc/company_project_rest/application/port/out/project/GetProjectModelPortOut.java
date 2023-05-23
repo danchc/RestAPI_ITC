@@ -6,6 +6,11 @@ import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 
+/*
+
+    Porting Out RETRIEVE Interface for ProjectModel
+
+ */
 public interface GetProjectModelPortOut {
 
     Optional<ProjectModel> retrieveById(ProjectId projectId);

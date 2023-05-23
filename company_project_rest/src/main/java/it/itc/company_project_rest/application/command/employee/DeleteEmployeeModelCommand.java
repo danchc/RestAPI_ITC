@@ -4,6 +4,11 @@ import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/*
+
+    Command for Delete EmployeeModel by ID
+
+ */
 @Getter
 @AllArgsConstructor
 public class DeleteEmployeeModelCommand {

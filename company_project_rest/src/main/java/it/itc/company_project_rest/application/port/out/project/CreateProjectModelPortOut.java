@@ -5,7 +5,7 @@ import it.itc.company_project_rest.domain.model.project.ProjectModel;
 
 /*
 
-    Porting Out Interface for ProjectModel
+    Porting Out CREATE Interface for ProjectModel
 
  */
 public interface CreateProjectModelPortOut {

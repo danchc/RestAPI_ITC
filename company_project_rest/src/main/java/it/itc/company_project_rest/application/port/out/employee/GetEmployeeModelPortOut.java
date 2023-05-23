@@ -7,6 +7,11 @@ import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity
 
 import java.util.Optional;
 
+/*
+
+    Porting Out RETRIEVE Interface for EmployeeModel
+
+ */
 public interface GetEmployeeModelPortOut {
 
     Optional<EmployeeModel> retrieveById(EmployeeId employeeId);

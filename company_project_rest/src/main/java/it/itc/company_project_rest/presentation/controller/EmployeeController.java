@@ -3,7 +3,6 @@ package it.itc.company_project_rest.presentation.controller;
 import it.itc.company_project_rest.application.command.employee.*;
 import it.itc.company_project_rest.application.port.in.employee.*;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
-import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.presentation.mapper.employee.EmployeeMapper;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeDepartmentRequest;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeProjectRequest;
@@ -76,10 +75,13 @@ public class EmployeeController {
         }
     }
 
+    /*
+        API Retrieve Employees
+     */
     @GetMapping
     public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
             @RequestParam(defaultValue = "100", required = false) int size,
-            @RequestParam(defaultValue = "100", required = false) int page) {
+            @RequestParam(defaultValue = "0", required = false) int page) {
         log.info("### Retrieve all Employees ###");
 
         Page<EmployeeResponse> employeeResponsePage =

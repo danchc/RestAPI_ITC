@@ -6,6 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/*
+
+    Interface for EmployeeModel RETRIEVE Use Case
+
+ */
+
 @Repository
 public interface GetEmployeeModelUseCase {
 

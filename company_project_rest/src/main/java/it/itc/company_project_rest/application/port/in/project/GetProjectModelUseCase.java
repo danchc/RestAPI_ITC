@@ -5,6 +5,12 @@ import it.itc.company_project_rest.domain.model.project.ProjectModel;
 
 import java.util.Optional;
 
+/*
+
+    Interface for ProjectModel RETRIEVE Use Case
+
+ */
+
 public interface GetProjectModelUseCase {
 
     Optional<ProjectModel> retrieveProjectModel(GetProjectModelCommand getProjectModelCommand);

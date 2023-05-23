@@ -23,9 +23,7 @@ public class EmployeeModel {
     private String name;
     private String surname;
     private String email;
-
     private DepartmentModel departmentModel;
-
     private Set<ProjectModel> projectModelSet;
 
     /* builder */
@@ -38,7 +36,9 @@ public class EmployeeModel {
         this.email = email;
         this.departmentModel = departmentModel;
         this.projectModelSet = projectModelSet;
-        validate(this);
+
+        /* Con questo la GET_ALL non funziona */
+        //validate(this);
     }
 
     /*

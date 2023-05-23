@@ -4,7 +4,7 @@ import it.itc.company_project_rest.domain.model.department.DepartmentModel;
 
 /*
 
-    Porting Out Interface for DepartmentModel
+    Porting Out CREATE Interface for DepartmentModel
 
  */
 

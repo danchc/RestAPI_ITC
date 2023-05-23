@@ -1,18 +1,19 @@
 package it.itc.company_project_rest.presentation.controller;
 
-import it.itc.company_project_rest.application.command.department.CreateDepartmentModelCommand;
 import it.itc.company_project_rest.application.command.department.DeleteDepartmentModelCommand;
+import it.itc.company_project_rest.application.command.department.GetAllDepartmentsModelCommand;
 import it.itc.company_project_rest.application.command.department.GetDepartmentModelCommand;
 import it.itc.company_project_rest.application.port.in.department.CreateDepartmentModelUseCase;
 import it.itc.company_project_rest.application.port.in.department.DeleteDepartmentModelUseCase;
+import it.itc.company_project_rest.application.port.in.department.GetAllDepartmentModelUseCase;
 import it.itc.company_project_rest.application.port.in.department.GetDepartmentModelUseCase;
 import it.itc.company_project_rest.domain.model.department.DepartmentId;
-import it.itc.company_project_rest.domain.model.department.DepartmentModel;
 import it.itc.company_project_rest.presentation.mapper.department.DepartmentMapper;
 import it.itc.company_project_rest.presentation.request.department.DepartmentRequest;
 import it.itc.company_project_rest.presentation.response.department.DepartmentResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class DepartmentController {
     private final CreateDepartmentModelUseCase createDepartmentModelUseCase;
     private final GetDepartmentModelUseCase getDepartmentModelUseCase;
     private final DeleteDepartmentModelUseCase deleteDepartmentModelUseCase;
+    private final GetAllDepartmentModelUseCase getAllDepartmentModelUseCase;
 
     private DepartmentMapper departmentMapper = new DepartmentMapper();
 
@@ -99,6 +101,23 @@ public class DepartmentController {
 
     }
 
+    /*
+        API RETRIEVE_ALL Department by ID
+     */
+    @GetMapping
+    public ResponseEntity<Page<DepartmentResponse>> getAllDepartmentModels(
+            @RequestParam(defaultValue = "100", required = false) int size,
+            @RequestParam(defaultValue = "100", required = false) int page
+    ) {
+        log.info("### Retrieving all DepartmentModels ###");
 
+        Page<DepartmentResponse> departmentResponses =
+                this.getAllDepartmentModelUseCase.retrieveAllDepartments(
+                        new GetAllDepartmentsModelCommand(
+                                size,page
+                        )
+                ).map(this.departmentMapper::fromModelToResponse);
 
+        return new ResponseEntity<>(departmentResponses, HttpStatus.OK);
+    }
 }

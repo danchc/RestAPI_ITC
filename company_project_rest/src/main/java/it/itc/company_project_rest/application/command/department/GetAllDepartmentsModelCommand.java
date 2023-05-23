@@ -2,16 +2,12 @@ package it.itc.company_project_rest.application.command.department;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-/*
-
-    Command for Create new DepartmentModel
-
- */
 @Getter
 @AllArgsConstructor
-public class CreateDepartmentModelCommand {
+public class GetAllDepartmentsModelCommand {
 
-    private String name;
-
+    private final int size;
+    private final int page;
 }

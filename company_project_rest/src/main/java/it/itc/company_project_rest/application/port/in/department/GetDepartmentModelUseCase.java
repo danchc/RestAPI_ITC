@@ -6,6 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+
+/*
+
+    Interface for DepartmentModel RETRIEVE Use Case
+
+ */
 @Repository
 public interface GetDepartmentModelUseCase {
 
