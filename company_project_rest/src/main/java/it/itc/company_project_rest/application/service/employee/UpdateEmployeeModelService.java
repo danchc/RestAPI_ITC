@@ -2,6 +2,7 @@ package it.itc.company_project_rest.application.service.employee;
 
 import it.itc.company_project_rest.application.command.employee.UpdateDepartmentEmployeeModelCommand;
 import it.itc.company_project_rest.application.command.employee.UpdateEmployeeModelCommand;
+import it.itc.company_project_rest.application.command.employee.UpdateProjectListEmployeeModelCommand;
 import it.itc.company_project_rest.application.port.in.employee.UpdateEmployeeModelUseCase;
 import it.itc.company_project_rest.application.port.out.department.GetDepartmentModelPortOut;
 import it.itc.company_project_rest.application.port.out.employee.GetEmployeeModelPortOut;
@@ -12,8 +13,6 @@ import it.itc.company_project_rest.domain.model.exception.ObjectNotFound;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,8 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
     /* project */
     private final GetProjectModelPortOut getProjectModelPortOut;
 
+
+    /* Update Employee with new name, surname or email */
     @Override
     public EmployeeModel updateEmployeeModel(UpdateEmployeeModelCommand updateEmployeeModelCommand) {
         log.info("### Retrieving Employee ###");
@@ -41,34 +42,12 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                     employeeModel.setName(updateEmployeeModelCommand.getName());
                     employeeModel.setSurname(updateEmployeeModelCommand.getSurname());
                     employeeModel.setEmail(updateEmployeeModelCommand.getEmail());
-                    /* prova
-                    * prendo l'id dal modello inserito nella request trasformata in command
-                    * e lo cerco, se non esiste eccezione (?)
-
-                    if(updateEmployeeModelCommand.getDepartmentModel() != null){
-                        employeeModel.setDepartmentModel(
-                                getDepartmentModelPortOut.retrieveById(
-                                        updateEmployeeModelCommand.getDepartmentModel().getDepartmentId()
-                                ).orElseThrow(
-                                        () -> new ObjectNotFound("### DepartmentModel not found ###")
-                                )
-                        );
-                    }
-                    /* se abbiamo inserito un projectmodel
-                    if(updateEmployeeModelCommand.getProjectModel() != null) {
-                        employeeModel.getProjectModelList().add(
-                                getProjectModelPortOut.retrieveById(
-                                        updateEmployeeModelCommand.getProjectModel().getProjectId()
-                                ).orElseThrow(
-                                        () -> new ObjectNotFound("### ProjectModel not found ###")
-                                )
-                        );
-                    } */
                     return updateEmployeeModelPortOut.persist(employeeModel);
                 }
         ).get();
     }
 
+    /* Update Employee with new Department */
     @Override
     public EmployeeModel updateDepartmentEmployeeModel(UpdateDepartmentEmployeeModelCommand updateDepartmentEmployeeModelCommand) {
         log.info("### Retrieving Employee ###");
@@ -88,6 +67,30 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                 }
         ).get();
 
+
+    }
+
+    /* Update Employee with new Project in Project List */
+    @Override
+    public EmployeeModel updateProjectListEmployeeModel(UpdateProjectListEmployeeModelCommand updateProjectListEmployeeModelCommand) {
+        log.info("### Retrieving EmployeeModel ###");
+
+        return this.getEmployeeModelPortOut.retrieveById(
+                updateProjectListEmployeeModelCommand.getEmployeeId()
+        ).map(employeeModel ->
+            {
+
+                employeeModel.getProjectModelList().add(
+                        this.getProjectModelPortOut.retrieveById(
+                                updateProjectListEmployeeModelCommand.getProjectId()
+                        ).orElseThrow(
+                                () -> new ObjectNotFound("### ProjectModel Not Found ###")
+                        )
+                );
+
+                return this.updateEmployeeModelPortOut.persist(employeeModel);
+            }
+        ).get();
 
     }
 }
