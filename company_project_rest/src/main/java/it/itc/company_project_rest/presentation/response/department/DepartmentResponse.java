@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class DepartmentResponse {
-
     private String name;
 
 }

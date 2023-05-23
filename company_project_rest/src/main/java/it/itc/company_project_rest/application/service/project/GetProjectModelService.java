@@ -1,7 +1,6 @@
 package it.itc.company_project_rest.application.service.project;
 
 import it.itc.company_project_rest.application.command.project.GetProjectModelCommand;
-import it.itc.company_project_rest.application.mapper.project.ProjectMapper;
 import it.itc.company_project_rest.application.port.in.project.GetProjectModelUseCase;
 import it.itc.company_project_rest.application.port.out.project.GetProjectModelPortOut;
 import it.itc.company_project_rest.domain.model.project.ProjectModel;
@@ -21,7 +20,7 @@ public class GetProjectModelService implements GetProjectModelUseCase {
     @Override
     public Optional<ProjectModel> retrieveProjectModel(GetProjectModelCommand getProjectModelCommand) {
         log.info("#### Retrieving ProjectModel #####");
-        return this.getProjectModelPortOut.getProjectModel(
+        return this.getProjectModelPortOut.retrieveById(
                 getProjectModelCommand.getProjectId()
         );
     }

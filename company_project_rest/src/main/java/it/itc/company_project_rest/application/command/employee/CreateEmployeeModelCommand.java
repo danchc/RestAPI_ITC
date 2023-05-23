@@ -14,7 +14,6 @@ public class CreateEmployeeModelCommand {
     private String name;
     private String surname;
     private String email;
-
     //private DepartmentModel departmentModel;
     //private List<ProjectModel> projectModelList;
 

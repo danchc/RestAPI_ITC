@@ -33,7 +33,7 @@ public class ProjectAdapterService implements CreateProjectModelPortOut, GetProj
 
     /* Metodo per cercare un progetto */
     @Override
-    public Optional<ProjectModel> getProjectModel(ProjectId projectId) {
+    public Optional<ProjectModel> retrieveById(ProjectId projectId) {
         return this.projectJpaRepository.findById(
                 projectId.getProjectId()
         ).map(projectMapper::fromEntityToModel);

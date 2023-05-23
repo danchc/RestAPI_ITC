@@ -1,13 +1,13 @@
 package it.itc.company_project_rest.infrastructure.entity.department;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
+import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data

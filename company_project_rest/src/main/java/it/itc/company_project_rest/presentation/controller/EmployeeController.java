@@ -84,7 +84,9 @@ public class EmployeeController {
                                         employeeRequest.getName(),
                                         employeeRequest.getSurname(),
                                         employeeRequest.getEmail(),
-                                        employeeRequest.getDepartmentId()
+                                        /* prova */
+                                        employeeRequest.getDepartmentModel(),
+                                        employeeRequest.getProjectModel()
                                 )
                         )
                 ),
