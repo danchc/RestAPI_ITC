@@ -10,9 +10,13 @@ import it.itc.company_project_rest.application.port.out.employee.UpdateEmployeeM
 import it.itc.company_project_rest.application.port.out.project.GetProjectModelPortOut;
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.domain.model.exception.ObjectNotFound;
+import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -79,13 +83,18 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                 updateProjectListEmployeeModelCommand.getEmployeeId()
         ).map(employeeModel ->
             {
+                List<ProjectModel> projectModelList = new LinkedList<>(employeeModel.getProjectModelList());
 
-                employeeModel.getProjectModelList().add(
+                projectModelList.add(
                         this.getProjectModelPortOut.retrieveById(
                                 updateProjectListEmployeeModelCommand.getProjectId()
                         ).orElseThrow(
                                 () -> new ObjectNotFound("### ProjectModel Not Found ###")
                         )
+                );
+
+                employeeModel.setProjectModelList(
+                        projectModelList
                 );
 
                 return this.updateEmployeeModelPortOut.persist(employeeModel);
