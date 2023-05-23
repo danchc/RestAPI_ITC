@@ -1,9 +1,6 @@
 package it.itc.company_project_rest.infrastructure.service.employee;
 
-import it.itc.company_project_rest.application.port.out.employee.CreateEmployeeModelPortOut;
-import it.itc.company_project_rest.application.port.out.employee.DeleteEmployeeModelPortOut;
-import it.itc.company_project_rest.application.port.out.employee.GetEmployeeModelPortOut;
-import it.itc.company_project_rest.application.port.out.employee.UpdateEmployeeModelPortOut;
+import it.itc.company_project_rest.application.port.out.employee.*;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
@@ -11,13 +8,17 @@ import it.itc.company_project_rest.infrastructure.jpa.employee.EmployeeJpaReposi
 import it.itc.company_project_rest.infrastructure.jpa.mapper.employee.EmployeeMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut, DeleteEmployeeModelPortOut {
+public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut, DeleteEmployeeModelPortOut, GetAllEmployeeModelPortOut {
 
     private final EmployeeJpaRepository employeeJpaRepository;
     private EmployeeMapper employeeMapper = new EmployeeMapper();
@@ -45,5 +46,16 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
         this.employeeJpaRepository.deleteById(
                 employeeId.getEmployeeId()
         );
+    }
+
+
+    @Override
+    public Page<EmployeeModel> findAll(Pageable pageable) {
+
+        Page<EmployeeEntity> employeeEntityPage = this.employeeJpaRepository.fetchAllEmployee(pageable);
+
+        List<EmployeeModel> employeeModelList = employeeEntityPage.stream().map(employeeMapper::fromEntityToModel).toList();
+
+        return new PageImpl<>(employeeModelList, pageable, employeeEntityPage.getTotalElements());
     }
 }

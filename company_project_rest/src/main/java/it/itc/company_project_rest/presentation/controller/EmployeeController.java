@@ -1,10 +1,7 @@
 package it.itc.company_project_rest.presentation.controller;
 
 import it.itc.company_project_rest.application.command.employee.*;
-import it.itc.company_project_rest.application.port.in.employee.CreateEmployeeModelUseCase;
-import it.itc.company_project_rest.application.port.in.employee.DeleteEmployeeModelUseCase;
-import it.itc.company_project_rest.application.port.in.employee.GetEmployeeModelUseCase;
-import it.itc.company_project_rest.application.port.in.employee.UpdateEmployeeModelUseCase;
+import it.itc.company_project_rest.application.port.in.employee.*;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.presentation.mapper.employee.EmployeeMapper;
@@ -14,6 +11,7 @@ import it.itc.company_project_rest.presentation.request.employee.EmployeeRequest
 import it.itc.company_project_rest.presentation.response.employee.EmployeeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +29,7 @@ public class EmployeeController {
     private final GetEmployeeModelUseCase getEmployeeModelUseCase;
     private final UpdateEmployeeModelUseCase updateEmployeeModelUseCase;
     private final DeleteEmployeeModelUseCase deleteEmployeeModelUseCase;
+    private final GetAllEmployeeModelUseCase getAllEmployeeModelUseCase;
 
     private EmployeeMapper employeeMapper = new EmployeeMapper();
 
@@ -75,6 +74,23 @@ public class EmployeeController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
+            @RequestParam(defaultValue = "100", required = false) int size,
+            @RequestParam(defaultValue = "100", required = false) int page) {
+        log.info("### Retrieve all Employees ###");
+
+        Page<EmployeeResponse> employeeResponsePage =
+                this.getAllEmployeeModelUseCase.getAllEmployeeModel(
+                        new GetAllEmployeeModelCommand(
+                                size,
+                                page
+                        )
+                ).map(employeeMapper::fromModelToResponse);
+
+        return new ResponseEntity<>(employeeResponsePage, HttpStatus.OK);
     }
 
     /*
@@ -157,7 +173,7 @@ public class EmployeeController {
                         new EmployeeId(employeeId)
                 )
         );
-        
+
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }
