@@ -1,6 +1,7 @@
 package it.itc.company_project_rest.infrastructure.service.department;
 
 import it.itc.company_project_rest.application.port.out.department.CreateDepartmentModelPortOut;
+import it.itc.company_project_rest.application.port.out.department.DeleteDepartmentModelPortOut;
 import it.itc.company_project_rest.application.port.out.department.GetDepartmentModelPortOut;
 import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class DepartmentAdapterService implements CreateDepartmentModelPortOut, GetDepartmentModelPortOut {
+public class DepartmentAdapterService implements CreateDepartmentModelPortOut, GetDepartmentModelPortOut, DeleteDepartmentModelPortOut {
 
     private final DepartmentJpaRepository departmentJpaRepository;
 
@@ -36,5 +37,13 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
         return this.departmentJpaRepository.findById(
                 departmentId.getDepartmentId()
         ).map(departmentMapper::fromEntityToModel);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(DepartmentId departmentId) {
+        this.departmentJpaRepository.deleteById(
+                departmentId.getDepartmentId()
+        );
     }
 }

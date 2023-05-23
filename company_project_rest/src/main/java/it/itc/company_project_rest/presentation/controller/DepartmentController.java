@@ -1,8 +1,10 @@
 package it.itc.company_project_rest.presentation.controller;
 
 import it.itc.company_project_rest.application.command.department.CreateDepartmentModelCommand;
+import it.itc.company_project_rest.application.command.department.DeleteDepartmentModelCommand;
 import it.itc.company_project_rest.application.command.department.GetDepartmentModelCommand;
 import it.itc.company_project_rest.application.port.in.department.CreateDepartmentModelUseCase;
+import it.itc.company_project_rest.application.port.in.department.DeleteDepartmentModelUseCase;
 import it.itc.company_project_rest.application.port.in.department.GetDepartmentModelUseCase;
 import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
@@ -33,6 +35,7 @@ public class DepartmentController {
     /* casi d'uso */
     private final CreateDepartmentModelUseCase createDepartmentModelUseCase;
     private final GetDepartmentModelUseCase getDepartmentModelUseCase;
+    private final DeleteDepartmentModelUseCase deleteDepartmentModelUseCase;
 
     private DepartmentMapper departmentMapper = new DepartmentMapper();
 
@@ -78,9 +81,24 @@ public class DepartmentController {
 
     }
 
-    /* DELETE METHOD */
+    /*
+        API Delete Department by ID
+     */
+    @DeleteMapping("/{departmentId}")
+    public ResponseEntity<Void> deleteDepartment(@PathVariable UUID departmentId){
+        log.info("### Deleting Department ###");
+        log.debug("### Requested to delete Department with ID {}", departmentId);
 
-    /* PUT METHOD */
+        this.deleteDepartmentModelUseCase.deleteDepartmentModel(
+                new DeleteDepartmentModelCommand(
+                        new DepartmentId(departmentId)
+                )
+        );
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+    }
+
 
 
 }
