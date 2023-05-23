@@ -1,25 +1,19 @@
 package it.itc.company_project_rest.infrastructure.jpa.mapper.employee;
 
+import it.itc.company_project_rest.domain.model.department.DepartmentId;
+import it.itc.company_project_rest.domain.model.department.DepartmentModel;
+import it.itc.company_project_rest.domain.model.employee.EmployeeId;
+import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
+import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
+import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
+import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
+import java.util.LinkedList;
+
 /*
 
     Mapping Class for Employee
 
  */
-
-
-import it.itc.company_project_rest.domain.model.department.DepartmentId;
-import it.itc.company_project_rest.domain.model.department.DepartmentModel;
-import it.itc.company_project_rest.domain.model.employee.EmployeeId;
-import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
-import it.itc.company_project_rest.domain.model.project.ProjectId;
-import it.itc.company_project_rest.domain.model.project.ProjectModel;
-import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
-import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
-import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class EmployeeMapper {
 
@@ -33,14 +27,13 @@ public class EmployeeMapper {
                 .email(employeeModel.getEmail())
                 .name(employeeModel.getName())
                 .surname(employeeModel.getSurname())
-
-                /* da rivedere */
+                /* da rivedere
                 .departmentEntity(
                         departmentMapper.fromModelToEntity(employeeModel.getDepartmentModel())
                 )
                 .projectEntityList(
                         employeeModel.getProjectModelList().stream().map(projectMapper::fromModelToEntity).toList()
-                ).build();
+                )*/.build();
 
     }
 
@@ -51,6 +44,7 @@ public class EmployeeMapper {
                 .email(employeeEntity.getEmail())
                 .name(employeeEntity.getName())
                 .surname(employeeEntity.getSurname())
+                /*
                 .departmentModel(
                         new DepartmentModel(
                                 new DepartmentId(employeeEntity.getDepartmentEntity().getDepartmentId()),
@@ -61,7 +55,7 @@ public class EmployeeMapper {
                         new LinkedList<>(
                                 employeeEntity.getProjectEntityList().stream().map(projectMapper::fromEntityToModel).toList()
                         )
-                )
+                )*/
                 .build();
     }
 

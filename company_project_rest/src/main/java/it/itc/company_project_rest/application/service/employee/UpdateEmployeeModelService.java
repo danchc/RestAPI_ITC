@@ -1,5 +1,6 @@
 package it.itc.company_project_rest.application.service.employee;
 
+import it.itc.company_project_rest.application.command.employee.UpdateDepartmentEmployeeModelCommand;
 import it.itc.company_project_rest.application.command.employee.UpdateEmployeeModelCommand;
 import it.itc.company_project_rest.application.port.in.employee.UpdateEmployeeModelUseCase;
 import it.itc.company_project_rest.application.port.out.department.GetDepartmentModelPortOut;
@@ -43,7 +44,7 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                     /* prova
                     * prendo l'id dal modello inserito nella request trasformata in command
                     * e lo cerco, se non esiste eccezione (?)
-                    */
+
                     if(updateEmployeeModelCommand.getDepartmentModel() != null){
                         employeeModel.setDepartmentModel(
                                 getDepartmentModelPortOut.retrieveById(
@@ -53,7 +54,7 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                                 )
                         );
                     }
-                    /* se abbiamo inserito un projectmodel */
+                    /* se abbiamo inserito un projectmodel
                     if(updateEmployeeModelCommand.getProjectModel() != null) {
                         employeeModel.getProjectModelList().add(
                                 getProjectModelPortOut.retrieveById(
@@ -62,10 +63,31 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                                         () -> new ObjectNotFound("### ProjectModel not found ###")
                                 )
                         );
-                    }
-
+                    } */
                     return updateEmployeeModelPortOut.persist(employeeModel);
                 }
         ).get();
+    }
+
+    @Override
+    public EmployeeModel updateDepartmentEmployeeModel(UpdateDepartmentEmployeeModelCommand updateDepartmentEmployeeModelCommand) {
+        log.info("### Retrieving Employee ###");
+
+        return this.getEmployeeModelPortOut.retrieveById(
+                updateDepartmentEmployeeModelCommand.getEmployeeId()
+        ).map(
+                employeeModel -> {
+                    employeeModel.setDepartmentModel(
+                            getDepartmentModelPortOut.retrieveById(
+                                        updateDepartmentEmployeeModelCommand.getDepartmentId()
+                                    ).orElseThrow(
+                                        () -> new ObjectNotFound("### DepartmentModel not found ###")
+                                    )
+                    );
+                    return this.updateEmployeeModelPortOut.persist(employeeModel);
+                }
+        ).get();
+
+
     }
 }

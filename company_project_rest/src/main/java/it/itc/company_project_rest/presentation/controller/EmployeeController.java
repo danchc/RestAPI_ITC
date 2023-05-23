@@ -1,6 +1,7 @@
 package it.itc.company_project_rest.presentation.controller;
 
 import it.itc.company_project_rest.application.command.employee.GetEmployeeModelCommand;
+import it.itc.company_project_rest.application.command.employee.UpdateDepartmentEmployeeModelCommand;
 import it.itc.company_project_rest.application.command.employee.UpdateEmployeeModelCommand;
 import it.itc.company_project_rest.application.port.in.employee.CreateEmployeeModelUseCase;
 import it.itc.company_project_rest.application.port.in.employee.GetEmployeeModelUseCase;
@@ -8,6 +9,7 @@ import it.itc.company_project_rest.application.port.in.employee.UpdateEmployeeMo
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.presentation.mapper.employee.EmployeeMapper;
+import it.itc.company_project_rest.presentation.request.employee.EmployeeDepartmentRequest;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeRequest;
 import it.itc.company_project_rest.presentation.response.employee.EmployeeResponse;
 import lombok.RequiredArgsConstructor;
@@ -83,17 +85,31 @@ public class EmployeeController {
                                         new EmployeeId(employeeId),
                                         employeeRequest.getName(),
                                         employeeRequest.getSurname(),
-                                        employeeRequest.getEmail(),
-                                        /* prova */
-                                        employeeRequest.getDepartmentModel(),
-                                        employeeRequest.getProjectModel()
+                                        employeeRequest.getEmail()
                                 )
                         )
                 ),
                 HttpStatus.ACCEPTED
         );
 
+    }
 
+    @PutMapping("/dep/{employeeId}")
+    public ResponseEntity<EmployeeResponse> updateDepartmentEmployeeModel(@PathVariable UUID employeeId, @RequestBody EmployeeDepartmentRequest employeeDepartmentRequest) {
+        log.info("#### Updating EmployeeModel ####");
+        log.debug("#### Requested to update {} with departmentId ####", employeeId);
+
+        return new ResponseEntity<>(
+                this.employeeMapper.fromModelToResponse(
+                        this.updateEmployeeModelUseCase.updateDepartmentEmployeeModel(
+                                new UpdateDepartmentEmployeeModelCommand(
+                                        new EmployeeId(employeeId),
+                                        employeeDepartmentRequest.getDepartmentId()
+                                )
+                        )
+                ),
+                HttpStatus.ACCEPTED
+        );
     }
 
 
