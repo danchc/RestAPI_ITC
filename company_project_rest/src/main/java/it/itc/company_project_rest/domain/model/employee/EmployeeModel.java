@@ -31,9 +31,15 @@ public class EmployeeModel {
         this.employeeId = employeeId;
         this.name = name;
         this.surname = surname;
-        this.email = email;
         this.departmentModel = departmentModel;
         this.projectModelList = projectModelList;
+
+        if(email != null && validate(email)){
+            this.email = email;
+        } else {
+            throw new RuntimeException();
+        }
+
     }
 
     private boolean validate(String email) {
