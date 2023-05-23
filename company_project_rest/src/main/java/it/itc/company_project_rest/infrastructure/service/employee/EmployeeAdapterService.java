@@ -1,6 +1,7 @@
 package it.itc.company_project_rest.infrastructure.service.employee;
 
 import it.itc.company_project_rest.application.port.out.employee.CreateEmployeeModelPortOut;
+import it.itc.company_project_rest.application.port.out.employee.DeleteEmployeeModelPortOut;
 import it.itc.company_project_rest.application.port.out.employee.GetEmployeeModelPortOut;
 import it.itc.company_project_rest.application.port.out.employee.UpdateEmployeeModelPortOut;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut {
+public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut, DeleteEmployeeModelPortOut {
 
     private final EmployeeJpaRepository employeeJpaRepository;
     private EmployeeMapper employeeMapper = new EmployeeMapper();
@@ -36,5 +37,13 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
         return this.employeeJpaRepository.findById(
                 employeeId.getEmployeeId()
         ).map(employeeMapper::fromEntityToModel);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(EmployeeId employeeId) {
+        this.employeeJpaRepository.deleteById(
+                employeeId.getEmployeeId()
+        );
     }
 }

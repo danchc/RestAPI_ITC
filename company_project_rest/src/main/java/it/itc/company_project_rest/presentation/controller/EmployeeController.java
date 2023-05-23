@@ -1,10 +1,8 @@
 package it.itc.company_project_rest.presentation.controller;
 
-import it.itc.company_project_rest.application.command.employee.GetEmployeeModelCommand;
-import it.itc.company_project_rest.application.command.employee.UpdateDepartmentEmployeeModelCommand;
-import it.itc.company_project_rest.application.command.employee.UpdateEmployeeModelCommand;
-import it.itc.company_project_rest.application.command.employee.UpdateProjectListEmployeeModelCommand;
+import it.itc.company_project_rest.application.command.employee.*;
 import it.itc.company_project_rest.application.port.in.employee.CreateEmployeeModelUseCase;
+import it.itc.company_project_rest.application.port.in.employee.DeleteEmployeeModelUseCase;
 import it.itc.company_project_rest.application.port.in.employee.GetEmployeeModelUseCase;
 import it.itc.company_project_rest.application.port.in.employee.UpdateEmployeeModelUseCase;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
@@ -32,6 +30,7 @@ public class EmployeeController {
     private final CreateEmployeeModelUseCase createEmployeeModelUseCase;
     private final GetEmployeeModelUseCase getEmployeeModelUseCase;
     private final UpdateEmployeeModelUseCase updateEmployeeModelUseCase;
+    private final DeleteEmployeeModelUseCase deleteEmployeeModelUseCase;
 
     private EmployeeMapper employeeMapper = new EmployeeMapper();
 
@@ -97,7 +96,7 @@ public class EmployeeController {
                                 )
                         )
                 ),
-                HttpStatus.ACCEPTED
+                HttpStatus.OK
         );
 
     }
@@ -119,7 +118,7 @@ public class EmployeeController {
                                 )
                         )
                 ),
-                HttpStatus.ACCEPTED
+                HttpStatus.OK
         );
     }
 
@@ -140,8 +139,26 @@ public class EmployeeController {
                                 )
                         )
                 ),
-                HttpStatus.ACCEPTED
+                HttpStatus.OK
         );
+
+    }
+
+    /*
+        API Delete Employee
+     */
+    @DeleteMapping("/{employeeId}")
+    public ResponseEntity<Void> deleteEmployeeModel(@PathVariable UUID employeeId){
+        log.info("### Deleting Employee ###");
+        log.debug("### Requested delete Employee with ID {} ###", employeeId);
+
+        this.deleteEmployeeModelUseCase.deleteEmployeeModel(
+                new DeleteEmployeeModelCommand(
+                        new EmployeeId(employeeId)
+                )
+        );
+        
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }
 
