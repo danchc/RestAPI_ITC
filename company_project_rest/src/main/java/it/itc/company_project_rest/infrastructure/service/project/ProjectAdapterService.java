@@ -2,6 +2,7 @@ package it.itc.company_project_rest.infrastructure.service.project;
 
 import it.itc.company_project_rest.application.command.project.GetProjectModelCommand;
 import it.itc.company_project_rest.application.port.out.project.CreateProjectModelPortOut;
+import it.itc.company_project_rest.application.port.out.project.DeleteProjectModelPortOut;
 import it.itc.company_project_rest.application.port.out.project.GetProjectModelPortOut;
 import it.itc.company_project_rest.domain.model.project.ProjectId;
 import it.itc.company_project_rest.domain.model.project.ProjectModel;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectAdapterService implements CreateProjectModelPortOut, GetProjectModelPortOut {
+public class ProjectAdapterService implements CreateProjectModelPortOut, GetProjectModelPortOut, DeleteProjectModelPortOut {
 
     private final ProjectJpaRepository projectJpaRepository;
 
@@ -40,5 +41,11 @@ public class ProjectAdapterService implements CreateProjectModelPortOut, GetProj
     }
 
 
-
+    @Override
+    @Transactional
+    public void deleteById(ProjectId projectId) {
+        this.projectJpaRepository.deleteById(
+                projectId.getProjectId()
+        );
+    }
 }

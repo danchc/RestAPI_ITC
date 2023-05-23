@@ -1,8 +1,10 @@
 package it.itc.company_project_rest.presentation.controller;
 
+import it.itc.company_project_rest.application.command.project.DeleteProjectModelCommand;
 import it.itc.company_project_rest.application.command.project.GetProjectModelCommand;
 import it.itc.company_project_rest.application.port.in.project.CreateProjectModelUseCase;
 
+import it.itc.company_project_rest.application.port.in.project.DeleteProjectModelUseCase;
 import it.itc.company_project_rest.application.port.in.project.GetProjectModelUseCase;
 import it.itc.company_project_rest.domain.model.project.ProjectId;
 import it.itc.company_project_rest.presentation.mapper.project.ProjectMapper;
@@ -31,6 +33,7 @@ public class ProjectController {
 
     private final CreateProjectModelUseCase createProjectModelUseCase;
     private final GetProjectModelUseCase getProjectModelUseCase;
+    private final DeleteProjectModelUseCase deleteProjectModelUseCase;
 
     private final ProjectMapper projectMapper = new ProjectMapper();
 
@@ -76,6 +79,24 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+    }
+
+
+    /*
+        API Delete Project by ID
+     */
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<Void> deleteProject(@PathVariable UUID projectId){
+        log.info("### Deleting Project ###");
+        log.debug("### Requested to delete Project with ID {} ###", projectId);
+
+        this.deleteProjectModelUseCase.deleteProjectModel(
+                new DeleteProjectModelCommand(
+                        new ProjectId(projectId)
+                )
+        );
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 
