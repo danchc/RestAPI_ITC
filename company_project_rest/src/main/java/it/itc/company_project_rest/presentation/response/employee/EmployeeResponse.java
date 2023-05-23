@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class EmployeeResponse {
     private String surname;
     private String email;
     private DepartmentModel departmentModel;
-    private List<ProjectModel> projectModelList;
+    private Set<ProjectModel> projectModelList;
 
 }
 

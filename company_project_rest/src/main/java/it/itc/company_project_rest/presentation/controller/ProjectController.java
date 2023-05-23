@@ -34,7 +34,9 @@ public class ProjectController {
 
     private final ProjectMapper projectMapper = new ProjectMapper();
 
-    /* POST METHOD */
+    /*
+        API Create new Project
+     */
     @PostMapping
     public ResponseEntity<ProjectResponse> createProjectModel(@RequestBody ProjectRequest projectRequest) {
         log.info("#### Creating new Project ####");
@@ -50,6 +52,9 @@ public class ProjectController {
         );
     }
 
+    /*
+        API Retrieve Project by ID
+     */
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectResponse> getProjectModel(@PathVariable UUID projectId){
         log.info("#### Retrieving new Project ####");

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -29,16 +30,16 @@ public class EmployeeEntity {
     private DepartmentEntity departmentEntity;
 
     @OneToMany
-    private List<ProjectEntity> projectEntityList;
+    private Set<ProjectEntity> projectEntitySet;
 
     @Builder
-    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, List<ProjectEntity> projectEntityList){
+    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, Set<ProjectEntity> projectEntitySet){
         this.employeeId = employeeId;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.departmentEntity = departmentEntity;
-        this.projectEntityList = projectEntityList;
+        this.projectEntitySet = projectEntitySet;
     }
 
 }

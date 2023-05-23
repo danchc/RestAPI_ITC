@@ -29,7 +29,7 @@ public class ProjectModel {
         Validate Project Name
      */
     private boolean validateName(String name){
-        if(name != null && name.isEmpty()){
+        if(name != null && !name.isEmpty()){
             return true;
         } else {
             throw new EmptyField("Please insert a valid project name.");

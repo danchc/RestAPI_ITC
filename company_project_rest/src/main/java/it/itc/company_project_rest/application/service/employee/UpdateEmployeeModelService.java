@@ -15,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -83,9 +85,9 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                 updateProjectListEmployeeModelCommand.getEmployeeId()
         ).map(employeeModel ->
             {
-                List<ProjectModel> projectModelList = new LinkedList<>(employeeModel.getProjectModelList());
+                Set<ProjectModel> projectModelSet = new HashSet<>(employeeModel.getProjectModelSet());
 
-                projectModelList.add(
+                projectModelSet.add(
                         this.getProjectModelPortOut.retrieveById(
                                 updateProjectListEmployeeModelCommand.getProjectId()
                         ).orElseThrow(
@@ -93,8 +95,8 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                         )
                 );
 
-                employeeModel.setProjectModelList(
-                        projectModelList
+                employeeModel.setProjectModelSet(
+                        projectModelSet
                 );
 
                 return this.updateEmployeeModelPortOut.persist(employeeModel);

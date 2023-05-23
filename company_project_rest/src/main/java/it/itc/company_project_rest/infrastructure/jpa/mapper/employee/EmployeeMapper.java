@@ -10,8 +10,12 @@ import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity
 import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
+
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
 
@@ -27,14 +31,14 @@ public class EmployeeMapper {
     /* fromModelToEntity */
     public EmployeeEntity fromModelToEntity(EmployeeModel employeeModel){
         DepartmentEntity departmentEntity = null;
-        List<ProjectEntity> projectEntityList = new LinkedList<>();
+        Set<ProjectEntity> projectEntitySet = new HashSet<>();
 
         if(employeeModel.getDepartmentModel() != null){
              departmentEntity = departmentMapper.fromModelToEntity(employeeModel.getDepartmentModel());
         }
 
-        if(employeeModel.getProjectModelList() != null){
-            projectEntityList = employeeModel.getProjectModelList().stream().map(projectMapper::fromModelToEntity).toList();
+        if(employeeModel.getProjectModelSet() != null){
+            projectEntitySet = employeeModel.getProjectModelSet().stream().map(projectMapper::fromModelToEntity).collect(Collectors.toSet());
         }
 
         return EmployeeEntity.builder()
@@ -46,8 +50,8 @@ public class EmployeeMapper {
                 .departmentEntity(
                         departmentEntity
                 )
-                .projectEntityList(
-                        projectEntityList
+                .projectEntitySet(
+                        projectEntitySet
                 ).build();
 
     }
@@ -56,7 +60,7 @@ public class EmployeeMapper {
     public EmployeeModel fromEntityToModel(EmployeeEntity employeeEntity){
 
         DepartmentModel departmentModel = null;
-        List<ProjectModel> projectModelList = new LinkedList<>();
+        Set<ProjectModel> projectModelSet = new HashSet<ProjectModel>();
 
         if(employeeEntity.getDepartmentEntity() != null) {
             departmentModel = new DepartmentModel(
@@ -67,8 +71,8 @@ public class EmployeeMapper {
             );
         }
 
-        if(employeeEntity.getProjectEntityList() != null) {
-            projectModelList = employeeEntity.getProjectEntityList().stream().map(projectMapper::fromEntityToModel).toList();
+        if(employeeEntity.getProjectEntitySet() != null) {
+            projectModelSet = employeeEntity.getProjectEntitySet().stream().map(projectMapper::fromEntityToModel).collect(Collectors.toSet());
         }
 
         return EmployeeModel.builder()
@@ -79,8 +83,8 @@ public class EmployeeMapper {
                 .departmentModel(
                         departmentModel
                 )
-                .projectModelList(
-                        projectModelList
+                .projectModelSet(
+                    projectModelSet
                 )
                 .build();
     }

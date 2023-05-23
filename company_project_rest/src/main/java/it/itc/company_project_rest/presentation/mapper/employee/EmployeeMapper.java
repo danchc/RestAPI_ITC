@@ -24,7 +24,7 @@ public class EmployeeMapper {
                 employeeModel.getSurname(),
                 employeeModel.getEmail(),
                 employeeModel.getDepartmentModel(),
-                employeeModel.getProjectModelList()
+                employeeModel.getProjectModelSet()
         );
     }
 }

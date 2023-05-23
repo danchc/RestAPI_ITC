@@ -37,7 +37,9 @@ public class DepartmentController {
     private DepartmentMapper departmentMapper = new DepartmentMapper();
 
 
-    /* POST METHOD */
+    /*
+        API Create new Department
+     */
     @PostMapping
     public ResponseEntity<DepartmentResponse> createDepartmentModel(@RequestBody DepartmentRequest departmentRequest) {
         log.info("#### Creating new Department ####");
@@ -51,7 +53,9 @@ public class DepartmentController {
     }
 
 
-    /* GET METHOD */
+    /*
+        API Retrieve Department by ID
+     */
     @GetMapping("/{departmentId}")
     public ResponseEntity<DepartmentResponse> getDepartmentModel(@PathVariable UUID departmentId) {
         log.info("#### Retrieving Department ####");

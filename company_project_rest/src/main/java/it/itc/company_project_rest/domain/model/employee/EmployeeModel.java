@@ -8,7 +8,9 @@ import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import jakarta.annotation.Nullable;
 import lombok.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Getter
@@ -24,18 +26,18 @@ public class EmployeeModel {
 
     private DepartmentModel departmentModel;
 
-    private List<ProjectModel> projectModelList;
+    private Set<ProjectModel> projectModelSet;
 
     /* builder */
 
     @Builder
-    private EmployeeModel(EmployeeId employeeId, String name, String surname, String email, DepartmentModel departmentModel, List<ProjectModel> projectModelList) {
+    private EmployeeModel(EmployeeId employeeId, String name, String surname, String email, DepartmentModel departmentModel, Set<ProjectModel> projectModelSet) {
         this.employeeId = employeeId;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.departmentModel = departmentModel;
-        this.projectModelList = projectModelList;
+        this.projectModelSet = projectModelSet;
         validate(this);
     }
 
@@ -86,6 +88,11 @@ public class EmployeeModel {
         if(!(validateName(employeeModel.getName()) && validateSurname(employeeModel.getSurname()) && validateEmail(employeeModel.getEmail()))){
             throw new InvalidObject("Please insert a valid Employee.");
         }
+    }
+
+
+    public Set<ProjectModel> getProjectModelSet() {
+        return Collections.unmodifiableSet(this.projectModelSet);
     }
 
 
