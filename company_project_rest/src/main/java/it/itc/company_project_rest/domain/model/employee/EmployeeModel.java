@@ -38,7 +38,7 @@ public class EmployeeModel {
         this.projectModelSet = projectModelSet;
 
         /* Con questo la GET_ALL non funziona */
-        //validate(this);
+        validate(this);
     }
 
     /*
