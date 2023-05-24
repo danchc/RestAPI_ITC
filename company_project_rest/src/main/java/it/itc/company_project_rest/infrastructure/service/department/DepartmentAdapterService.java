@@ -9,12 +9,12 @@ import it.itc.company_project_rest.domain.model.department.DepartmentModel;
 import it.itc.company_project_rest.infrastructure.entity.department.DepartmentEntity;
 import it.itc.company_project_rest.infrastructure.jpa.department.DepartmentJpaRepository;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +39,7 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<DepartmentModel> retrieveById(DepartmentId departmentId) {
         return this.departmentJpaRepository.findById(
                 departmentId.getDepartmentId()
@@ -54,6 +55,7 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DepartmentModel> findAll(Pageable pageable) {
         Page<DepartmentEntity> departmentEntities =
                 this.departmentJpaRepository.fetchAllDepartment(pageable);

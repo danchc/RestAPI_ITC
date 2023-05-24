@@ -6,12 +6,12 @@ import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
 import it.itc.company_project_rest.infrastructure.jpa.employee.EmployeeJpaRepository;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.employee.EmployeeMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut, DeleteEmployeeModelPortOut, GetAllEmployeeModelPortOut {
 
     private final EmployeeJpaRepository employeeJpaRepository;
-    private EmployeeMapper employeeMapper = new EmployeeMapper();
+    private final EmployeeMapper employeeMapper = new EmployeeMapper();
 
     @Override
     @Transactional
@@ -34,6 +34,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<EmployeeModel> retrieveById(EmployeeId employeeId) {
         return this.employeeJpaRepository.findById(
                 employeeId.getEmployeeId()
@@ -50,6 +51,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
 
 
     @Override
+    @Transactional(readOnly = true)
     public Page<EmployeeModel> findAll(Pageable pageable) {
 
         Page<EmployeeEntity> employeeEntityPage = this.employeeJpaRepository.fetchAllEmployee(pageable);

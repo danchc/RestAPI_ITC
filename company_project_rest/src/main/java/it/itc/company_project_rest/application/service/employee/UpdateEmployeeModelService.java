@@ -45,9 +45,14 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                 updateEmployeeModelCommand.getEmployeeId()
         ).map(
                 employeeModel -> {
-                    employeeModel.setName(updateEmployeeModelCommand.getName());
-                    employeeModel.setSurname(updateEmployeeModelCommand.getSurname());
-                    employeeModel.setEmail(updateEmployeeModelCommand.getEmail());
+
+                    EmployeeModel.builder()
+                            .employeeId(employeeModel.getEmployeeId())
+                                    .name(updateEmployeeModelCommand.getName())
+                                            .surname(updateEmployeeModelCommand.getSurname())
+                                                    .email(updateEmployeeModelCommand.getEmail())
+                            .build();
+
                     return updateEmployeeModelPortOut.persist(employeeModel);
                 }
         ).get();
@@ -62,13 +67,15 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                 updateDepartmentEmployeeModelCommand.getEmployeeId()
         ).map(
                 employeeModel -> {
+
                     employeeModel.setDepartmentModel(
                             getDepartmentModelPortOut.retrieveById(
-                                        updateDepartmentEmployeeModelCommand.getDepartmentId()
-                                    ).orElseThrow(
-                                        () -> new ObjectNotFound("### DepartmentModel not found ###")
-                                    )
+                                    updateDepartmentEmployeeModelCommand.getDepartmentId()
+                            ).orElseThrow(
+                                    () -> new ObjectNotFound("### DepartmentModel not found ###")
+                            )
                     );
+
                     return this.updateEmployeeModelPortOut.persist(employeeModel);
                 }
         ).get();

@@ -1,17 +1,24 @@
 package it.itc.company_project_rest.presentation.controller;
 
+import it.itc.company_project_rest.application.command.department.GetAllDepartmentsModelCommand;
 import it.itc.company_project_rest.application.command.project.DeleteProjectModelCommand;
+import it.itc.company_project_rest.application.command.project.GetAllProjectModelCommand;
 import it.itc.company_project_rest.application.command.project.GetProjectModelCommand;
 import it.itc.company_project_rest.application.port.in.project.CreateProjectModelUseCase;
 
 import it.itc.company_project_rest.application.port.in.project.DeleteProjectModelUseCase;
+import it.itc.company_project_rest.application.port.in.project.GetAllProjectModelUseCase;
 import it.itc.company_project_rest.application.port.in.project.GetProjectModelUseCase;
 import it.itc.company_project_rest.domain.model.project.ProjectId;
+import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import it.itc.company_project_rest.presentation.mapper.project.ProjectMapper;
 import it.itc.company_project_rest.presentation.request.project.ProjectRequest;
+import it.itc.company_project_rest.presentation.response.department.DepartmentResponse;
 import it.itc.company_project_rest.presentation.response.project.ProjectResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +35,13 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/project")
+@RequestMapping("/projects")
 public class ProjectController {
 
     private final CreateProjectModelUseCase createProjectModelUseCase;
     private final GetProjectModelUseCase getProjectModelUseCase;
     private final DeleteProjectModelUseCase deleteProjectModelUseCase;
+    private final GetAllProjectModelUseCase getAllProjectModelUseCase;
 
     private final ProjectMapper projectMapper = new ProjectMapper();
 
@@ -78,6 +86,28 @@ public class ProjectController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+    }
+
+    /*
+        API Retrieve all Projects
+     */
+    @GetMapping
+    public ResponseEntity<Page<ProjectResponse>> getAllProjects(
+            @RequestParam(defaultValue = "100", required = false) int size,
+            @RequestParam(defaultValue = "0", required = false) int page
+    ) {
+        log.info("### Retrieve all Projects ###");
+
+        Page<ProjectResponse> projectResponses =
+                this.getAllProjectModelUseCase.getAllProjects(
+                        new GetAllProjectModelCommand(
+                                size,page
+                        )
+                ).map(this.projectMapper::fromModelToResponse);
+
+        return new ResponseEntity<>(projectResponses, HttpStatus.OK);
+
 
     }
 

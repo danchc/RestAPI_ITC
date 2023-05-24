@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 
 @RestController
-@RequestMapping("/department")
+@RequestMapping("/departments")
 @Slf4j
 @RequiredArgsConstructor
 public class DepartmentController {
@@ -107,7 +107,7 @@ public class DepartmentController {
     @GetMapping
     public ResponseEntity<Page<DepartmentResponse>> getAllDepartmentModels(
             @RequestParam(defaultValue = "100", required = false) int size,
-            @RequestParam(defaultValue = "100", required = false) int page
+            @RequestParam(defaultValue = "0", required = false) int page
     ) {
         log.info("### Retrieving all DepartmentModels ###");
 

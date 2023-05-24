@@ -4,6 +4,7 @@ import it.itc.company_project_rest.application.command.employee.CreateEmployeeMo
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeRequest;
 import it.itc.company_project_rest.presentation.response.employee.EmployeeResponse;
+import it.itc.company_project_rest.presentation.response.employee.GetEmployeeResponse;
 
 public class EmployeeMapper {
 
@@ -20,6 +21,15 @@ public class EmployeeMapper {
     /* fromModelToResponse */
     public EmployeeResponse fromModelToResponse(EmployeeModel employeeModel){
         return new EmployeeResponse(
+                employeeModel.getName(),
+                employeeModel.getSurname(),
+                employeeModel.getEmail()
+        );
+    }
+
+    /* fromModelToGetResponse */
+    public GetEmployeeResponse fromModelToGetResponse(EmployeeModel employeeModel){
+        return new GetEmployeeResponse(
                 employeeModel.getName(),
                 employeeModel.getSurname(),
                 employeeModel.getEmail(),

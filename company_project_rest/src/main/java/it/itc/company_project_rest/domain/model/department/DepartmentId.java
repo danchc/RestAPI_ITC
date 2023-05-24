@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class DepartmentId {
 
     private UUID departmentId;

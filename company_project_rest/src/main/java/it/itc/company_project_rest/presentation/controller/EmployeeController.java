@@ -8,6 +8,7 @@ import it.itc.company_project_rest.presentation.request.employee.EmployeeDepartm
 import it.itc.company_project_rest.presentation.request.employee.EmployeeProjectRequest;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeRequest;
 import it.itc.company_project_rest.presentation.response.employee.EmployeeResponse;
+import it.itc.company_project_rest.presentation.response.employee.GetEmployeeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employees")
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeController {
@@ -30,7 +31,7 @@ public class EmployeeController {
     private final DeleteEmployeeModelUseCase deleteEmployeeModelUseCase;
     private final GetAllEmployeeModelUseCase getAllEmployeeModelUseCase;
 
-    private EmployeeMapper employeeMapper = new EmployeeMapper();
+    private final EmployeeMapper employeeMapper = new EmployeeMapper();
 
     /*
         API Create new Employee with common fields
@@ -54,7 +55,7 @@ public class EmployeeController {
         API Retrieve Employee with ID
      */
     @GetMapping("/{employeeId}")
-    public ResponseEntity<EmployeeResponse> getEmployeeModel(@PathVariable UUID employeeId) {
+    public ResponseEntity<GetEmployeeResponse> getEmployeeModel(@PathVariable UUID employeeId) {
         log.info("#### Retrieving EmployeeModel ####");
         log.debug("#### Requested to retrieve {} ####", employeeId);
 
@@ -62,11 +63,16 @@ public class EmployeeController {
                 new GetEmployeeModelCommand(
                         new EmployeeId(employeeId)
                 );
-
+        /*
         Optional<EmployeeResponse> employeeResponse =
                 this.getEmployeeModelUseCase.retrieveEmployee(
                         getEmployeeModelCommand
-                ).map(employeeMapper::fromModelToResponse);
+                ).map(employeeMapper::fromModelToResponse);*/
+
+        Optional<GetEmployeeResponse> employeeResponse =
+                this.getEmployeeModelUseCase.retrieveEmployee(
+                        getEmployeeModelCommand
+                ).map(employeeMapper::fromModelToGetResponse);
 
         if(employeeResponse.isPresent()){
             return ResponseEntity.ok(employeeResponse.get());
