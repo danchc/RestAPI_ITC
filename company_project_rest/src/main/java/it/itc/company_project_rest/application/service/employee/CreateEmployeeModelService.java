@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class CreateEmployeeModelService implements CreateEmployeeModelUseCase {
 
     private final CreateEmployeeModelPortOut createEmployeeModelPortOut;
-    private EmployeeMapper employeeMapper = new EmployeeMapper();
+    private final EmployeeMapper employeeMapper = new EmployeeMapper();
 
 
     @Override

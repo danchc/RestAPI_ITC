@@ -13,7 +13,7 @@ public class DepartmentModel {
 
     /* fields */
     private final DepartmentId departmentId;
-    private String name;
+    private final String name;
 
     public DepartmentModel(DepartmentId departmentId, String name){
         this.departmentId = departmentId;

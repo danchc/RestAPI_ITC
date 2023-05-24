@@ -11,7 +11,7 @@ public class ProjectModel {
 
     /* fields */
 
-    private ProjectId projectId;
+    private final ProjectId projectId;
     private String name;
     private String startDate; //SimpleDateFormat ?
     private String endDate;
