@@ -8,6 +8,8 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
+/* no argomenti perchè sennò HttpConversionException !!! */
 public class DepartmentId {
 
     private UUID departmentId;

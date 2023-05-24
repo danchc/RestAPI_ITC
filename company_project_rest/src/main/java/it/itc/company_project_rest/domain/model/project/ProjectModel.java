@@ -1,6 +1,7 @@
 package it.itc.company_project_rest.domain.model.project;
 
 import it.itc.company_project_rest.domain.model.exception.EmptyField;
+import it.itc.company_project_rest.domain.model.exception.NullObject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,10 +29,12 @@ public class ProjectModel {
         Validate Project Name
      */
     private boolean validateName(String name){
-        if(name != null && !name.isEmpty()){
-            return true;
-        } else {
+        if(name == null) {
+            throw new NullObject("Name cannot be null.");
+        } else if(name.isEmpty()) {
             throw new EmptyField("Please insert a valid project name.");
+        } else {
+            return true;
         }
     }
 

@@ -1,6 +1,7 @@
 package it.itc.company_project_rest.domain.model.department;
 
 import it.itc.company_project_rest.domain.model.exception.EmptyField;
+import it.itc.company_project_rest.domain.model.exception.NullObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,10 +26,12 @@ public class DepartmentModel {
         Validate Department Name
      */
     private boolean validateName(String name){
-        if(name != null && !name.isEmpty()){
-            return true;
-        } else {
+        if(name == null) {
+            throw new NullObject("Name cannot be null.");
+        } else if(name.isEmpty()) {
             throw new EmptyField("Please insert a valid department name.");
+        } else {
+            return true;
         }
     }
 }

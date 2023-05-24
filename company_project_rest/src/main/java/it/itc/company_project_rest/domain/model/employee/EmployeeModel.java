@@ -1,10 +1,7 @@
 package it.itc.company_project_rest.domain.model.employee;
 
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
-import it.itc.company_project_rest.domain.model.exception.EmptyField;
-import it.itc.company_project_rest.domain.model.exception.InvalidObject;
-import it.itc.company_project_rest.domain.model.exception.NullObject;
-import it.itc.company_project_rest.domain.model.exception.ObjectNotFound;
+import it.itc.company_project_rest.domain.model.exception.*;
 import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import jakarta.annotation.Nullable;
 import lombok.*;
@@ -25,7 +22,7 @@ public class EmployeeModel {
     private final String name;
     private final String surname;
     private final String email;
-    private final DepartmentModel departmentModel;
+    private DepartmentModel departmentModel;
     private Set<ProjectModel> projectModelSet = new HashSet<>();
 
     /* builder */
@@ -37,6 +34,7 @@ public class EmployeeModel {
         this.surname = surname;
         this.email = email;
         this.departmentModel = departmentModel;
+        this.projectModelSet = projectModelSet;
         /* Con questo la GET_ALL non funziona */
         validate(this);
     }
@@ -52,10 +50,12 @@ public class EmployeeModel {
 
         Pattern pat = Pattern.compile(emailRegex);
 
-        if(email != null && pat.matcher(email).matches()) {
-            return true;
-        } else {
+        if(email == null) {
+            throw new NullObject("E-mail cannot be null.");
+        } else if (email.isEmpty()){
             throw new EmptyField("Please insert a valid e-mail.");
+        } else {
+            return pat.matcher(email).matches();
         }
     }
 
@@ -63,10 +63,12 @@ public class EmployeeModel {
         Validate Employee Name
      */
     private boolean validateName(String name) {
-        if(name != null && !name.isEmpty()){
-            return true;
+        if(name == null) {
+            throw new NullObject("Name cannot be null.");
+        } else if(name.isEmpty()) {
+            throw new EmptyField("Please insert a valid Employee name.");
         } else {
-            throw new EmptyField("Please insert a valid name.");
+            return true;
         }
     }
 
@@ -74,10 +76,12 @@ public class EmployeeModel {
         Validate Employee Surname
      */
     private boolean validateSurname(String surname) {
-        if(surname != null && !surname.isEmpty()){
-            return true;
+        if(surname == null) {
+            throw new NullObject("Surname cannot be null.");
+        } else if(surname.isEmpty()) {
+            throw new EmptyField("Please insert a valid Employee surname.");
         } else {
-            throw new EmptyField("Please insert a valid surname.");
+            return true;
         }
     }
 
@@ -98,18 +102,39 @@ public class EmployeeModel {
     }
 
     /*
+        Metodo per aggiungere un nuovo progetto alla lista dell'Employee
+     */
+    public void addNewProject(ProjectModel projectModel){
+        if (projectModel == null) {
+            throw new NullObject("Project cannot be null.");
+        }
+        if (this.projectModelSet.contains(projectModel)){
+            throw new AlreadyExists("This project is already assigned to Employee.");
+        }
+        this.projectModelSet.add(projectModel);
+    }
+
+    /*
+        Metodo per rimuovere un progetto dalla lista dell'Employee
+     */
+    public void removeProject(ProjectModel projectModel){
+        if (projectModel == null) {
+            throw new NullObject("Project cannot be null.");
+        }
+        if (!this.projectModelSet.contains(projectModel)){
+            throw new ObjectNotFound("Employee is not working on this project.");
+        }
+        this.projectModelSet.remove(projectModel);
+    }
+
+    /*
         metodi per assegnazione e dissociazione di dipartimento, progetto
      */
-    public void setDepartmentModel(DepartmentModel departmentModel){
-        if(departmentModel == null) {
+    public void setDepartmentModel(DepartmentModel dep){
+        if(dep == null) {
             throw new NullObject("Department cannot be null.");
-        } else if(this.getDepartmentModel().equals(departmentModel)){
-            throw new RuntimeException("ERRORE");
         } else {
-            EmployeeModel.builder()
-                    .employeeId(getEmployeeId())
-                    .departmentModel(departmentModel)
-                    .build();
+            this.departmentModel = dep;
         }
     }
 

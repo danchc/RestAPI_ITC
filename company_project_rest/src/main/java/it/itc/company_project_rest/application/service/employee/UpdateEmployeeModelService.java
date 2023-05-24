@@ -15,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,21 +38,24 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
     public EmployeeModel updateEmployeeModel(UpdateEmployeeModelCommand updateEmployeeModelCommand) {
         log.info("### Retrieving Employee ###");
 
-        return this.getEmployeeModelPortOut.retrieveById(
-                updateEmployeeModelCommand.getEmployeeId()
-        ).map(
-                employeeModel -> {
+        Optional<EmployeeModel> employeeRetrieved =
+                this.getEmployeeModelPortOut.retrieveById(
+                        updateEmployeeModelCommand.getEmployeeId()
+                );
 
+        if(employeeRetrieved.isPresent()){
+
+            return updateEmployeeModelPortOut.persist(
                     EmployeeModel.builder()
-                            .employeeId(employeeModel.getEmployeeId())
-                                    .name(updateEmployeeModelCommand.getName())
-                                            .surname(updateEmployeeModelCommand.getSurname())
-                                                    .email(updateEmployeeModelCommand.getEmail())
-                            .build();
-
-                    return updateEmployeeModelPortOut.persist(employeeModel);
-                }
-        ).get();
+                            .employeeId(employeeRetrieved.get().getEmployeeId())
+                            .name(updateEmployeeModelCommand.getName())
+                            .surname(updateEmployeeModelCommand.getSurname())
+                            .email(updateEmployeeModelCommand.getEmail())
+                            .build()
+            );
+        } else {
+            throw new ObjectNotFound("Employee not found.");
+        }
     }
 
     /* Update Employee with new Department */
@@ -63,22 +63,24 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
     public EmployeeModel updateDepartmentEmployeeModel(UpdateDepartmentEmployeeModelCommand updateDepartmentEmployeeModelCommand) {
         log.info("### Retrieving Employee ###");
 
-        return this.getEmployeeModelPortOut.retrieveById(
-                updateDepartmentEmployeeModelCommand.getEmployeeId()
-        ).map(
-                employeeModel -> {
+        Optional<EmployeeModel> employeeRetrieved =
+                this.getEmployeeModelPortOut.retrieveById(
+                        updateDepartmentEmployeeModelCommand.getEmployeeId()
+                );
 
-                    employeeModel.setDepartmentModel(
-                            getDepartmentModelPortOut.retrieveById(
-                                    updateDepartmentEmployeeModelCommand.getDepartmentId()
-                            ).orElseThrow(
-                                    () -> new ObjectNotFound("### DepartmentModel not found ###")
-                            )
-                    );
+        if(employeeRetrieved.isPresent()){
+            employeeRetrieved.get().setDepartmentModel(
+                    getDepartmentModelPortOut.retrieveById(
+                            updateDepartmentEmployeeModelCommand.getDepartmentId()
+                    ).orElseThrow(
+                            () -> new ObjectNotFound("### DepartmentModel not found ###")
+                    )
+            );
 
-                    return this.updateEmployeeModelPortOut.persist(employeeModel);
-                }
-        ).get();
+            return this.updateEmployeeModelPortOut.persist(employeeRetrieved.get());
+        } else {
+            throw new ObjectNotFound("Employee not found.");
+        }
 
 
     }
@@ -88,27 +90,21 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
     public EmployeeModel updateProjectListEmployeeModel(UpdateProjectListEmployeeModelCommand updateProjectListEmployeeModelCommand) {
         log.info("### Retrieving EmployeeModel ###");
 
-        return this.getEmployeeModelPortOut.retrieveById(
-                updateProjectListEmployeeModelCommand.getEmployeeId()
-        ).map(employeeModel ->
-            {
-                Set<ProjectModel> projectModelSet = new HashSet<>(employeeModel.getProjectModelSet());
-
-                projectModelSet.add(
-                        this.getProjectModelPortOut.retrieveById(
-                                updateProjectListEmployeeModelCommand.getProjectId()
-                        ).orElseThrow(
-                                () -> new ObjectNotFound("### ProjectModel Not Found ###")
-                        )
+        Optional<EmployeeModel> employeeRetrieved =
+                this.getEmployeeModelPortOut.retrieveById(
+                        updateProjectListEmployeeModelCommand.getEmployeeId()
                 );
-
-                employeeModel.setProjectModelSet(
-                        projectModelSet
-                );
-
-                return this.updateEmployeeModelPortOut.persist(employeeModel);
-            }
-        ).get();
-
+        if(employeeRetrieved.isPresent()){
+            employeeRetrieved.get().addNewProject(
+                    this.getProjectModelPortOut.retrieveById(
+                            updateProjectListEmployeeModelCommand.getProjectId()
+                    ).orElseThrow(
+                            () -> new ObjectNotFound("### ProjectModel Not Found ###")
+                    )
+            );
+            return this.updateEmployeeModelPortOut.persist(employeeRetrieved.get());
+        } else {
+            throw new ObjectNotFound("Employee not found.");
+        }
     }
 }

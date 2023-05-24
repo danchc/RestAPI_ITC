@@ -85,18 +85,18 @@ public class EmployeeController {
         API Retrieve Employees
      */
     @GetMapping
-    public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
+    public ResponseEntity<Page<GetEmployeeResponse>> getAllEmployees(
             @RequestParam(defaultValue = "100", required = false) int size,
             @RequestParam(defaultValue = "0", required = false) int page) {
         log.info("### Retrieve all Employees ###");
 
-        Page<EmployeeResponse> employeeResponsePage =
+        Page<GetEmployeeResponse> employeeResponsePage =
                 this.getAllEmployeeModelUseCase.getAllEmployeeModel(
                         new GetAllEmployeeModelCommand(
                                 size,
                                 page
                         )
-                ).map(employeeMapper::fromModelToResponse);
+                ).map(employeeMapper::fromModelToGetResponse);
 
         return new ResponseEntity<>(employeeResponsePage, HttpStatus.OK);
     }
@@ -129,12 +129,12 @@ public class EmployeeController {
         API Update Employee with new Department
      */
     @PutMapping("/dep/{employeeId}")
-    public ResponseEntity<EmployeeResponse> updateDepartmentEmployeeModel(@PathVariable UUID employeeId, @RequestBody EmployeeDepartmentRequest employeeDepartmentRequest) {
+    public ResponseEntity<GetEmployeeResponse> updateDepartmentEmployeeModel(@PathVariable UUID employeeId, @RequestBody EmployeeDepartmentRequest employeeDepartmentRequest) {
         log.info("#### Updating EmployeeModel with Department####");
         log.debug("#### Requested to update {} with departmentId ####", employeeId);
 
         return new ResponseEntity<>(
-                this.employeeMapper.fromModelToResponse(
+                this.employeeMapper.fromModelToGetResponse(
                         this.updateEmployeeModelUseCase.updateDepartmentEmployeeModel(
                                 new UpdateDepartmentEmployeeModelCommand(
                                         new EmployeeId(employeeId),
