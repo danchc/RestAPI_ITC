@@ -14,12 +14,11 @@ public class ProjectMapper {
 
     /* fromModelToEntity */
     public ProjectEntity fromModelToEntity(ProjectModel projectModel) {
-        return new ProjectEntity(
-                projectModel.getProjectId().getProjectId(),
-                projectModel.getName(),
-                projectModel.getStartDate(),
-                projectModel.getEndDate()
-        );
+        return ProjectEntity.builder()
+                .name(projectModel.getName())
+                .startDate(projectModel.getStartDate())
+                .endDate(projectModel.getEndDate())
+                .build();
     }
 
     /* fromEntityToModel */

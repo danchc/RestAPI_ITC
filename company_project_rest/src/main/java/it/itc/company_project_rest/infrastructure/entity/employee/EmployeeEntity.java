@@ -1,6 +1,7 @@
 package it.itc.company_project_rest.infrastructure.entity.employee;
 
 import it.itc.company_project_rest.infrastructure.entity.department.DepartmentEntity;
+import it.itc.company_project_rest.infrastructure.entity.employee_project.EmployeeProjectEntity;
 import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,19 +29,26 @@ public class EmployeeEntity {
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
     private DepartmentEntity departmentEntity;
 
-    @OneToMany
-    private Set<ProjectEntity> projectEntitySet;
+    @OneToMany(mappedBy = "employeeEntity", cascade = CascadeType.ALL)
+    private Set<EmployeeProjectEntity> projectEntitySet;
 
     @Builder
-    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, Set<ProjectEntity> projectEntitySet){
+    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, Set<EmployeeProjectEntity> projectEntitySet){
         this.employeeId = employeeId;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.departmentEntity = departmentEntity;
         this.projectEntitySet = projectEntitySet;
+    }
+
+    public void addProject(ProjectEntity projectEntity){
+        EmployeeProjectEntity employeeProjectEntity = new EmployeeProjectEntity(this, projectEntity);
+        this.projectEntitySet.add(employeeProjectEntity);
+        projectEntity.getEmployeeEntitySet().add(employeeProjectEntity);
     }
 
 }

@@ -25,7 +25,7 @@ public class DepartmentEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "employeeId")
+    @OneToMany(mappedBy = "departmentEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmployeeEntity> employeeEntitySet = new HashSet<>();
 
     @Builder

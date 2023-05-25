@@ -34,7 +34,10 @@ public class EmployeeModel {
         this.surname = surname;
         this.email = email;
         this.departmentModel = departmentModel;
-        this.projectModelSet = projectModelSet;
+        if(projectModelSet != null){
+            this.projectModelSet = projectModelSet;
+        }
+
         /* Con questo la GET_ALL non funziona */
         validate(this);
     }

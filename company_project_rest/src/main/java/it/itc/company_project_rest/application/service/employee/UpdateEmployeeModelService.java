@@ -94,6 +94,7 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                 this.getEmployeeModelPortOut.retrieveById(
                         updateProjectListEmployeeModelCommand.getEmployeeId()
                 );
+
         if(employeeRetrieved.isPresent()){
             employeeRetrieved.get().addNewProject(
                     this.getProjectModelPortOut.retrieveById(

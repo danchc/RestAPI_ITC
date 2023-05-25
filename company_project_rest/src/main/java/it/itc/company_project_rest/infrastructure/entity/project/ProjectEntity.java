@@ -1,19 +1,19 @@
 package it.itc.company_project_rest.infrastructure.entity.project;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
+import it.itc.company_project_rest.infrastructure.entity.employee_project.EmployeeProjectEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "project")
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProjectEntity {
 
@@ -24,4 +24,17 @@ public class ProjectEntity {
     private String name;
     private String startDate;
     private String endDate;
+
+    @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EmployeeProjectEntity> employeeEntitySet;
+
+    @Builder
+    public ProjectEntity(UUID projectId, String name, String startDate, String endDate, Set<EmployeeProjectEntity> employeeEntitySet){
+        this.projectId = projectId;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.employeeEntitySet = employeeEntitySet;
+    }
+
 }
