@@ -65,11 +65,6 @@ public class EmployeeController {
                 new GetEmployeeModelCommand(
                         new EmployeeId(employeeId)
                 );
-        /*
-        Optional<EmployeeResponse> employeeResponse =
-                this.getEmployeeModelUseCase.retrieveEmployee(
-                        getEmployeeModelCommand
-                ).map(employeeMapper::fromModelToResponse);*/
 
         Optional<GetEmployeeResponse> employeeResponse =
                 this.getEmployeeModelUseCase.retrieveEmployee(

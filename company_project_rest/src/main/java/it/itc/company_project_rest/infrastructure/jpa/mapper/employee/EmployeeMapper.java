@@ -28,6 +28,7 @@ public class EmployeeMapper {
     private DepartmentMapper departmentMapper = new DepartmentMapper();
     private ProjectMapper projectMapper = new ProjectMapper();
 
+
     /* fromModelToEntity */
     public EmployeeEntity fromModelToEntity(EmployeeModel employeeModel){
         DepartmentEntity departmentEntity = null;
@@ -60,15 +61,16 @@ public class EmployeeMapper {
     public EmployeeModel fromEntityToModel(EmployeeEntity employeeEntity){
 
         DepartmentModel departmentModel = null;
-        Set<ProjectModel> projectModelSet = new HashSet<ProjectModel>();
+        Set<ProjectModel> projectModelSet = new HashSet<>();
 
         if(employeeEntity.getDepartmentEntity() != null) {
-            departmentModel = new DepartmentModel(
-                    new DepartmentId(
-                            employeeEntity.getDepartmentEntity().getDepartmentId()
-                    ),
-                    employeeEntity.getDepartmentEntity().getName()
-            );
+
+            departmentModel =
+                    DepartmentModel.builder()
+                            .departmentId(new DepartmentId(employeeEntity.getDepartmentEntity().getDepartmentId()))
+                            .name(employeeEntity.getDepartmentEntity().getName())
+                            .build();
+
         }
 
         if(employeeEntity.getProjectEntitySet() != null) {

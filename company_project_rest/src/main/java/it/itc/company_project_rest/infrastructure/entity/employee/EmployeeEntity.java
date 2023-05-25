@@ -8,13 +8,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 @NoArgsConstructor
 public class EmployeeEntity {
 
@@ -26,10 +27,10 @@ public class EmployeeEntity {
     private String surname;
     private String email;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private DepartmentEntity departmentEntity;
 
-    @ManyToMany
+    @OneToMany
     private Set<ProjectEntity> projectEntitySet;
 
     @Builder

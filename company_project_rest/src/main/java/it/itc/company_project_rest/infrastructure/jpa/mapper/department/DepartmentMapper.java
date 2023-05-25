@@ -14,17 +14,19 @@ public class DepartmentMapper {
 
     /* fromModelToEntity */
     public DepartmentEntity fromModelToEntity(DepartmentModel departmentModel) {
-        return new DepartmentEntity(
-                departmentModel.getDepartmentId().getDepartmentId(),
-                departmentModel.getName()
-        );
+
+        return DepartmentEntity.builder()
+                .departmentId(departmentModel.getDepartmentId().getDepartmentId())
+                .name(departmentModel.getName())
+                .build();
+
     }
 
     /* fromEntityToModel */
     public DepartmentModel fromEntityToModel(DepartmentEntity departmentEntity) {
-        return new DepartmentModel(
-                new DepartmentId(departmentEntity.getDepartmentId()),
-                departmentEntity.getName()
-        );
+        return DepartmentModel.builder()
+                .departmentId(new DepartmentId(departmentEntity.getDepartmentId()))
+                .name(departmentEntity.getName())
+                .build();
     }
 }

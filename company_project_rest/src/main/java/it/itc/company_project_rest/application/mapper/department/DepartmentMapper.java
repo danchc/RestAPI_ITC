@@ -17,10 +17,10 @@ public class DepartmentMapper {
 
     /* fromCommandToModel */
     public DepartmentModel fromCommandToModel(CreateDepartmentModelCommand createDepartmentModelCommand) {
-        return new DepartmentModel(
-                new DepartmentId(UUID.randomUUID()),
-                createDepartmentModelCommand.getName()
-        );
+        return DepartmentModel.builder()
+                .departmentId(new DepartmentId(UUID.randomUUID()))
+                .name(createDepartmentModelCommand.getName())
+                .build();
     }
 
 
