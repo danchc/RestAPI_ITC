@@ -2,7 +2,9 @@ package it.itc.company_project_rest.presentation.controller;
 
 import it.itc.company_project_rest.application.command.employee.*;
 import it.itc.company_project_rest.application.port.in.employee.*;
+import it.itc.company_project_rest.domain.model.department.DepartmentId;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
+import it.itc.company_project_rest.domain.model.project.ProjectId;
 import it.itc.company_project_rest.presentation.mapper.employee.EmployeeMapper;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeDepartmentRequest;
 import it.itc.company_project_rest.presentation.request.employee.EmployeeProjectRequest;
@@ -138,7 +140,7 @@ public class EmployeeController {
                         this.updateEmployeeModelUseCase.updateDepartmentEmployeeModel(
                                 new UpdateDepartmentEmployeeModelCommand(
                                         new EmployeeId(employeeId),
-                                        employeeDepartmentRequest.getDepartmentId()
+                                        new DepartmentId(employeeDepartmentRequest.getDepartmentId())
                                 )
                         )
                 ),
@@ -150,16 +152,16 @@ public class EmployeeController {
         API Update Employee with new Project
      */
     @PutMapping("/project/{employeeId}")
-    public ResponseEntity<EmployeeResponse> updateProjectListEmployeeModel(@PathVariable UUID employeeId, @RequestBody EmployeeProjectRequest employeeProjectRequest){
+    public ResponseEntity<GetEmployeeResponse> updateProjectListEmployeeModel(@PathVariable UUID employeeId, @RequestBody EmployeeProjectRequest employeeProjectRequest){
         log.info("#### Updating EmployeeModel with Project####");
         log.debug("#### Requested to update {} with departmentId ####", employeeId);
 
         return new ResponseEntity<>(
-                this.employeeMapper.fromModelToResponse(
+                this.employeeMapper.fromModelToGetResponse(
                         this.updateEmployeeModelUseCase.updateProjectListEmployeeModel(
                                 new UpdateProjectListEmployeeModelCommand(
                                         new EmployeeId(employeeId),
-                                        employeeProjectRequest.getProjectId()
+                                        new ProjectId(employeeProjectRequest.getProjectId())
                                 )
                         )
                 ),

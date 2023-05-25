@@ -29,7 +29,7 @@ public class EmployeeEntity {
     @ManyToOne
     private DepartmentEntity departmentEntity;
 
-    @OneToMany
+    @ManyToMany
     private Set<ProjectEntity> projectEntitySet;
 
     @Builder

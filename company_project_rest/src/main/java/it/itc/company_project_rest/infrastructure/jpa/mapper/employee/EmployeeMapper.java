@@ -67,7 +67,7 @@ public class EmployeeMapper {
                     new DepartmentId(
                             employeeEntity.getDepartmentEntity().getDepartmentId()
                     ),
-                    employeeEntity.getName()
+                    employeeEntity.getDepartmentEntity().getName()
             );
         }
 
