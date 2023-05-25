@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-/* no argomenti perchè sennò HttpConversionException !!! */
 public class DepartmentId {
 
-    private UUID departmentId;
+    private final UUID departmentId;
+
+    public DepartmentId(UUID departmentId){
+        this.departmentId = departmentId;
+    }
 }

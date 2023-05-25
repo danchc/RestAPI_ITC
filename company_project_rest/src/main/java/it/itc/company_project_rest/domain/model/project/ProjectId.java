@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProjectId {
 
-    private UUID projectId;
+    private final UUID projectId;
+
+    public ProjectId(UUID projectId){
+        this.projectId = projectId;
+    }
 
 }

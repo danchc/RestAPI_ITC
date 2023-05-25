@@ -6,8 +6,11 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
 public class EmployeeId {
 
     private final UUID employeeId;
+
+    public EmployeeId(UUID employeeId){
+        this.employeeId = employeeId;
+    }
 }

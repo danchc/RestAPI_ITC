@@ -2,10 +2,7 @@ package it.itc.company_project_rest.domain.model.department;
 
 import it.itc.company_project_rest.domain.model.exception.EmptyField;
 import it.itc.company_project_rest.domain.model.exception.NullObject;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -15,11 +12,11 @@ public class DepartmentModel {
     private final DepartmentId departmentId;
     private final String name;
 
+    @Builder
     public DepartmentModel(DepartmentId departmentId, String name){
         this.departmentId = departmentId;
-        if(validateName(name)){
-            this.name = name;
-        }
+        this.name = name;
+        validate(this);
     }
 
     /*
@@ -33,5 +30,12 @@ public class DepartmentModel {
         } else {
             return true;
         }
+    }
+
+    /*
+        Validate Department
+     */
+    private void validate(DepartmentModel departmentModel){
+        validateName(departmentModel.getName());
     }
 }
