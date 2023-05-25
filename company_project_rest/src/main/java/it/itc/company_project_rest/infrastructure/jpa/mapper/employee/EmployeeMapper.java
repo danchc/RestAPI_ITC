@@ -34,13 +34,26 @@ public class EmployeeMapper {
     public EmployeeEntity fromModelToEntity(EmployeeModel employeeModel){
         DepartmentEntity departmentEntity = null;
         Set<ProjectEntity> projectEntitySet = new HashSet<>();
+        Set<EmployeeProjectEntity> employeeProjectEntities = new HashSet<>();
 
         if(employeeModel.getDepartmentModel() != null){
             departmentEntity = departmentMapper.fromModelToEntity(employeeModel.getDepartmentModel());
         }
 
         if(employeeModel.getProjectModelSet() != null){
-            projectEntitySet = employeeModel.getProjectModelSet().stream().map(projectMapper::fromModelToEntity).collect(Collectors.toSet());
+           // projectEntitySet = employeeModel.getProjectModelSet().stream().map(projectMapper::fromModelToEntity).collect(Collectors.toSet());
+            employeeProjectEntities = employeeModel.getProjectModelSet().stream().map(
+                    projectModel -> EmployeeProjectEntity.builder()
+                            .employeeEntity(
+                                    EmployeeEntity.builder()
+                                            .employeeId(employeeModel.getEmployeeId().getEmployeeId())
+                                            .name(employeeModel.getName())
+                                            .surname(employeeModel.getSurname())
+                                            .email(employeeModel.getEmail())
+                                            .build())
+                            .projectEntity(this.projectMapper.fromModelToEntity(projectModel))
+                            .build()
+            ).collect(Collectors.toSet());
         }
 
         return EmployeeEntity.builder()
@@ -49,7 +62,7 @@ public class EmployeeMapper {
                 .name(employeeModel.getName())
                 .surname(employeeModel.getSurname())
                 .departmentEntity(departmentEntity)
-
+                .projectEntitySet(employeeProjectEntities)
                 .build();
 
     }
@@ -72,6 +85,9 @@ public class EmployeeMapper {
 
         if(employeeEntity.getProjectEntitySet() != null) {
             //projectModelSet = employeeEntity.getProjectEntitySet().stream().map(projectMapper::fromEntityToModel).collect(Collectors.toSet());
+            projectModelSet = employeeEntity.getProjectEntitySet().stream().map(
+                    employeeProjectEntity -> this.projectMapper.fromEntityToModel(employeeProjectEntity.getProjectEntity())
+            ).collect(Collectors.toSet());
         }
 
         return EmployeeModel.builder()

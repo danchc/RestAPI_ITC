@@ -11,6 +11,8 @@ import it.itc.company_project_rest.application.port.out.project.GetProjectModelP
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
 import it.itc.company_project_rest.domain.model.exception.ObjectNotFound;
 import it.itc.company_project_rest.domain.model.project.ProjectModel;
+import it.itc.company_project_rest.infrastructure.jpa.mapper.employee.EmployeeMapper;
+import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
     /* project */
     private final GetProjectModelPortOut getProjectModelPortOut;
 
+    private final EmployeeMapper employeeMapper = new EmployeeMapper();
+    private final ProjectMapper projectMapper = new ProjectMapper();
 
     /* Update Employee with new name, surname or email */
     @Override
@@ -103,6 +107,8 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
                             () -> new ObjectNotFound("### ProjectModel Not Found ###")
                     )
             );
+
+
             return this.updateEmployeeModelPortOut.persist(employeeRetrieved.get());
         } else {
             throw new ObjectNotFound("Employee not found.");

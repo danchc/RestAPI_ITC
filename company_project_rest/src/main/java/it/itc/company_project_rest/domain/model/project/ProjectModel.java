@@ -23,7 +23,7 @@ public class ProjectModel {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        validate(this);
+        //validate(this);
     }
 
     /*

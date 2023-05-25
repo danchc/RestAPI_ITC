@@ -8,10 +8,12 @@ import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "EmployeeProject")
 @Table(name = "employee_project")
+@Getter
 @NoArgsConstructor
 public class EmployeeProjectEntity {
 
