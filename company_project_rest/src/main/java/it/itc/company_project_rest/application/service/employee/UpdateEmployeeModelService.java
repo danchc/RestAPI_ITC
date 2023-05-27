@@ -93,7 +93,6 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
     @Override
     public EmployeeModel updateProjectListEmployeeModel(UpdateProjectListEmployeeModelCommand updateProjectListEmployeeModelCommand) {
         log.info("### Retrieving EmployeeModel ###");
-
         Optional<EmployeeModel> employeeRetrieved =
                 this.getEmployeeModelPortOut.retrieveById(
                         updateProjectListEmployeeModelCommand.getEmployeeId()

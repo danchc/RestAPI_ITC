@@ -15,6 +15,7 @@ public class ProjectMapper {
     /* fromModelToEntity */
     public ProjectEntity fromModelToEntity(ProjectModel projectModel) {
         return ProjectEntity.builder()
+                .projectId(projectModel.getProjectId().getProjectId())
                 .name(projectModel.getName())
                 .startDate(projectModel.getStartDate())
                 .endDate(projectModel.getEndDate())

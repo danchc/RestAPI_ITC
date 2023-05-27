@@ -19,7 +19,7 @@ public class EmployeeProjectId implements Serializable {
     @Column(name = "employee_id")
     private UUID employeeId;
 
-    @Column(name = "employee_id")
+    @Column(name = "project_id")
     private UUID projectId;
 
     /*

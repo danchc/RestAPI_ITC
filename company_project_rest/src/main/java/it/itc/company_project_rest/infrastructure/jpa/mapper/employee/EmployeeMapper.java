@@ -12,10 +12,7 @@ import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.department.DepartmentMapper;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -33,7 +30,6 @@ public class EmployeeMapper {
     /* fromModelToEntity */
     public EmployeeEntity fromModelToEntity(EmployeeModel employeeModel){
         DepartmentEntity departmentEntity = null;
-        Set<ProjectEntity> projectEntitySet = new HashSet<>();
         Set<EmployeeProjectEntity> employeeProjectEntities = new HashSet<>();
 
         if(employeeModel.getDepartmentModel() != null){
@@ -42,17 +38,28 @@ public class EmployeeMapper {
 
         if(employeeModel.getProjectModelSet() != null){
            // projectEntitySet = employeeModel.getProjectModelSet().stream().map(projectMapper::fromModelToEntity).collect(Collectors.toSet());
+            /*
+                Prendo il Set<ProjectModel> e per ogni progetto al suo interno
+                creo il corrispettivo EmployeeProjectEntity e creo Set<EmployeeProjectEntity>
+             */
+
             employeeProjectEntities = employeeModel.getProjectModelSet().stream().map(
-                    projectModel -> EmployeeProjectEntity.builder()
-                            .employeeEntity(
-                                    EmployeeEntity.builder()
-                                            .employeeId(employeeModel.getEmployeeId().getEmployeeId())
-                                            .name(employeeModel.getName())
-                                            .surname(employeeModel.getSurname())
-                                            .email(employeeModel.getEmail())
-                                            .build())
-                            .projectEntity(this.projectMapper.fromModelToEntity(projectModel))
-                            .build()
+                    projectModel -> {
+                        EmployeeEntity ee = EmployeeEntity.builder()
+                                .employeeId(employeeModel.getEmployeeId().getEmployeeId())
+                                .name(employeeModel.getName())
+                                .surname(employeeModel.getSurname())
+                                .email(employeeModel.getEmail())
+                                .build();
+
+                        return EmployeeProjectEntity.builder()
+                                .employeeEntity(ee)
+                                .projectEntity(ProjectEntity.builder()
+                                        .projectId(this.projectMapper.fromModelToEntity(projectModel).getProjectId())
+                                        .name(this.projectMapper.fromModelToEntity(projectModel).getName())
+                                        .build())
+                                .build();
+                    }
             ).collect(Collectors.toSet());
         }
 
@@ -74,13 +81,11 @@ public class EmployeeMapper {
         Set<ProjectModel> projectModelSet = new HashSet<>();
 
         if(employeeEntity.getDepartmentEntity() != null) {
-
             departmentModel =
                     DepartmentModel.builder()
                             .departmentId(new DepartmentId(employeeEntity.getDepartmentEntity().getDepartmentId()))
                             .name(employeeEntity.getDepartmentEntity().getName())
                             .build();
-
         }
 
         if(employeeEntity.getProjectEntitySet() != null) {
@@ -95,12 +100,8 @@ public class EmployeeMapper {
                 .email(employeeEntity.getEmail())
                 .name(employeeEntity.getName())
                 .surname(employeeEntity.getSurname())
-                .departmentModel(
-                        departmentModel
-                )
-                .projectModelSet(
-                    projectModelSet
-                )
+                .departmentModel(departmentModel)
+                .projectModelSet(projectModelSet)
                 .build();
     }
 

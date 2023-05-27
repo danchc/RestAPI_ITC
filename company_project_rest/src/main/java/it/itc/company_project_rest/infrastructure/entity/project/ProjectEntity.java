@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class ProjectEntity {
     private String endDate;
 
     @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<EmployeeProjectEntity> employeeEntitySet;
+    private Set<EmployeeProjectEntity> employeeEntitySet = new HashSet<>();
 
     @Builder
     public ProjectEntity(UUID projectId, String name, String startDate, String endDate, Set<EmployeeProjectEntity> employeeEntitySet){
@@ -34,7 +35,10 @@ public class ProjectEntity {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.employeeEntitySet = employeeEntitySet;
+        if(employeeEntitySet != null){
+            this.employeeEntitySet = employeeEntitySet;
+        }
+
     }
 
 }

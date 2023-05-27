@@ -33,7 +33,7 @@ public class EmployeeEntity {
     private DepartmentEntity departmentEntity;
 
     @OneToMany(mappedBy = "employeeEntity", cascade = CascadeType.ALL)
-    private Set<EmployeeProjectEntity> projectEntitySet;
+    private Set<EmployeeProjectEntity> projectEntitySet = new HashSet<>();
 
     @Builder
     private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, Set<EmployeeProjectEntity> projectEntitySet){
@@ -42,7 +42,10 @@ public class EmployeeEntity {
         this.surname = surname;
         this.email = email;
         this.departmentEntity = departmentEntity;
-        this.projectEntitySet = projectEntitySet;
+        if(this.getProjectEntitySet() != null){
+            this.projectEntitySet = projectEntitySet;
+        }
+
     }
 
     public void addProject(ProjectEntity projectEntity){
