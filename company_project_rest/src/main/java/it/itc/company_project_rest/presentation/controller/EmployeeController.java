@@ -147,20 +147,19 @@ public class EmployeeController {
         API Update Employee with new Project
      */
     @PutMapping("/project/{employeeId}")
-    public ResponseEntity<GetEmployeeResponse> updateProjectListEmployeeModel(@PathVariable UUID employeeId, @RequestBody EmployeeProjectRequest employeeProjectRequest){
+    public ResponseEntity<Void> addProject(@PathVariable UUID employeeId, @RequestBody EmployeeProjectRequest employeeProjectRequest){
         log.info("#### Updating EmployeeModel with Project####");
         log.debug("#### Requested to update {} with departmentId ####", employeeId);
 
+        this.updateEmployeeModelUseCase.updateProjectListEmployeeModel(
+                new UpdateProjectListEmployeeModelCommand(
+                        new EmployeeId(employeeId),
+                        new ProjectId(employeeProjectRequest.getProjectId())
+                )
+        );
+
         return new ResponseEntity<>(
-                this.employeeMapper.fromModelToGetResponse(
-                        this.updateEmployeeModelUseCase.updateProjectListEmployeeModel(
-                                new UpdateProjectListEmployeeModelCommand(
-                                        new EmployeeId(employeeId),
-                                        new ProjectId(employeeProjectRequest.getProjectId())
-                                )
-                        )
-                ),
-                HttpStatus.OK
+                HttpStatus.ACCEPTED
         );
 
     }

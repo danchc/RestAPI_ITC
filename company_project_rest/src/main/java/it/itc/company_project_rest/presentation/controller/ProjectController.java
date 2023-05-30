@@ -1,17 +1,14 @@
 package it.itc.company_project_rest.presentation.controller;
 
 import it.itc.company_project_rest.application.command.department.GetAllDepartmentsModelCommand;
-import it.itc.company_project_rest.application.command.project.DeleteProjectModelCommand;
-import it.itc.company_project_rest.application.command.project.GetAllProjectModelCommand;
-import it.itc.company_project_rest.application.command.project.GetProjectModelCommand;
-import it.itc.company_project_rest.application.port.in.project.CreateProjectModelUseCase;
+import it.itc.company_project_rest.application.command.project.*;
+import it.itc.company_project_rest.application.port.in.project.*;
 
-import it.itc.company_project_rest.application.port.in.project.DeleteProjectModelUseCase;
-import it.itc.company_project_rest.application.port.in.project.GetAllProjectModelUseCase;
-import it.itc.company_project_rest.application.port.in.project.GetProjectModelUseCase;
+import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import it.itc.company_project_rest.domain.model.project.ProjectId;
 import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import it.itc.company_project_rest.presentation.mapper.project.ProjectMapper;
+import it.itc.company_project_rest.presentation.request.project.ProjectEmployeeRequest;
 import it.itc.company_project_rest.presentation.request.project.ProjectRequest;
 import it.itc.company_project_rest.presentation.response.department.DepartmentResponse;
 import it.itc.company_project_rest.presentation.response.project.ProjectResponse;
@@ -42,6 +39,8 @@ public class ProjectController {
     private final GetProjectModelUseCase getProjectModelUseCase;
     private final DeleteProjectModelUseCase deleteProjectModelUseCase;
     private final GetAllProjectModelUseCase getAllProjectModelUseCase;
+    private final UpdateProjectModelUseCase updateProjectModelUseCase;
+    private final UpdateProjectModelEmployeeUseCase updateProjectModelEmployeeUseCase;
 
     private final ProjectMapper projectMapper = new ProjectMapper();
 
@@ -129,6 +128,44 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    /* API Update Project */
+    @PutMapping("/{projectId}")
+    public ResponseEntity<ProjectResponse> updateProject(@PathVariable UUID projectId, @RequestBody ProjectRequest projectRequest){
+        log.info("### Updating Project ###");
+        log.debug("### Requested to update Project {}", projectId);
+
+        return new ResponseEntity<>(
+                this.projectMapper.fromModelToResponse(
+                        this.updateProjectModelUseCase.updateProjectModel(
+                                new UpdateProjectModelCommand(
+                                        new ProjectId(projectId),
+                                        projectRequest.getName(),
+                                        projectRequest.getStartDate(),
+                                        projectRequest.getEndDate()
+                                )
+                        )
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    /* API Add Employee in Project */
+    @PutMapping("/employee/{projectId}")
+    public ResponseEntity<Void> addEmployee(@PathVariable UUID projectId, @RequestBody ProjectEmployeeRequest projectEmployeeRequest){
+        log.info("### Adding new Employee in Project ###");
+        log.debug("### Requested to update Project {} ###", projectId);
+
+        this.updateProjectModelEmployeeUseCase.addEmployeeProject(
+                new UpdateProjectModelEmployeeCommand(
+                        new ProjectId(projectId),
+                        new EmployeeId(projectEmployeeRequest.getEmployeeId())
+                )
+        );
+
+        return new ResponseEntity<>(
+                HttpStatus.ACCEPTED
+        );
+    }
 
 
 }

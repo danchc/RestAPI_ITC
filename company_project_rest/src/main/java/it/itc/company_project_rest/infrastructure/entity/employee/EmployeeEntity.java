@@ -8,11 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.sql.Types;
+import java.util.*;
 
 @Data
 @Entity
@@ -32,26 +31,53 @@ public class EmployeeEntity {
     @JoinColumn(name = "department_id")
     private DepartmentEntity departmentEntity;
 
-    @OneToMany(mappedBy = "employeeEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employeeEntity", cascade = CascadeType.ALL,  orphanRemoval = true)
     private Set<EmployeeProjectEntity> projectEntitySet = new HashSet<>();
 
     @Builder
-    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity, Set<EmployeeProjectEntity> projectEntitySet){
+    private EmployeeEntity(UUID employeeId, String name, String surname, String email, DepartmentEntity departmentEntity){
         this.employeeId = employeeId;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.departmentEntity = departmentEntity;
-        if(this.getProjectEntitySet() != null){
-            this.projectEntitySet = projectEntitySet;
-        }
 
     }
 
+
+    /* add new project in Set<EmployeeProjectEntity> */
     public void addProject(ProjectEntity projectEntity){
         EmployeeProjectEntity employeeProjectEntity = new EmployeeProjectEntity(this, projectEntity);
         this.projectEntitySet.add(employeeProjectEntity);
-        projectEntity.getEmployeeEntitySet().add(employeeProjectEntity);
+        //projectEntity.getEmployeeEntitySet().add(employeeProjectEntity);
     }
+
+    /* remove project in Set<EmployeeProjectEntity> */
+    public void removeProject(ProjectEntity projectEntity){
+        for(Iterator<EmployeeProjectEntity> it = projectEntitySet.iterator(); it.hasNext();){
+            EmployeeProjectEntity employeeProjectEntity = it.next();
+
+            if(employeeProjectEntity.getEmployeeEntity().equals(this) && employeeProjectEntity.getProjectEntity().equals(projectEntity)) {
+                it.remove();
+                employeeProjectEntity.getProjectEntity().getEmployeeEntitySet().remove(employeeProjectEntity);
+                employeeProjectEntity.setEmployeeEntity(null);
+                employeeProjectEntity.setProjectEntity(null);
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EmployeeEntity)) return false;
+        return employeeId != null && employeeId.equals(((EmployeeEntity) o).getEmployeeId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+
 
 }

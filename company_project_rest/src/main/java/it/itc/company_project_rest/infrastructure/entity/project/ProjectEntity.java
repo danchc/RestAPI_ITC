@@ -7,10 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.sql.Types;
+import java.util.*;
 
 @Data
 @Entity
@@ -23,6 +26,7 @@ public class ProjectEntity {
     private UUID projectId;
 
     private String name;
+
     private String startDate;
     private String endDate;
 
@@ -30,15 +34,46 @@ public class ProjectEntity {
     private Set<EmployeeProjectEntity> employeeEntitySet = new HashSet<>();
 
     @Builder
-    public ProjectEntity(UUID projectId, String name, String startDate, String endDate, Set<EmployeeProjectEntity> employeeEntitySet){
+    public ProjectEntity(UUID projectId, String name, String startDate, String endDate){
         this.projectId = projectId;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        if(employeeEntitySet != null){
-            this.employeeEntitySet = employeeEntitySet;
-        }
-
     }
+
+    /* add new employee in employeeEntitySet */
+    public void addEmployee(EmployeeEntity employeeEntity){
+        EmployeeProjectEntity employeeProjectEntity = new EmployeeProjectEntity(employeeEntity, this);
+        this.employeeEntitySet.add(employeeProjectEntity);
+        //employeeEntity.getProjectEntitySet().add(employeeProjectEntity);
+    }
+
+    /* remove employee in employeeEntitySet */
+    public void removeEmployee(EmployeeEntity employeeEntity){
+        for(Iterator<EmployeeProjectEntity> it = employeeEntitySet.iterator(); it.hasNext();){
+            EmployeeProjectEntity employeeProjectEntity = it.next();
+
+            if(employeeProjectEntity.getProjectEntity().equals(this) && employeeProjectEntity.getEmployeeEntity().equals(employeeEntity)){
+                it.remove();
+                employeeProjectEntity.getProjectEntity().getEmployeeEntitySet().remove(employeeProjectEntity);
+                employeeProjectEntity.setProjectEntity(null);
+                employeeProjectEntity.setEmployeeEntity(null);
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProjectEntity projectEntity = (ProjectEntity) o;
+        return Objects.equals(name, projectEntity.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
 
 }

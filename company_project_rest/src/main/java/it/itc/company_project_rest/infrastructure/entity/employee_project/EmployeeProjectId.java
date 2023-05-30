@@ -5,8 +5,10 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.io.Serializable;
+import java.sql.Types;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -21,11 +23,6 @@ public class EmployeeProjectId implements Serializable {
 
     @Column(name = "project_id")
     private UUID projectId;
-
-    /*
-        Implementando Serializable è NECESSARIO fare Override dei metodi
-        equals e hashCode
-     */
 
     @Override
     public boolean equals(Object o) {

@@ -6,14 +6,16 @@ import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
 import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+
+import java.sql.Types;
+import java.util.Objects;
 
 @Entity(name = "EmployeeProject")
 @Table(name = "employee_project")
 @Getter
+@Setter
 @NoArgsConstructor
 public class EmployeeProjectEntity {
 
@@ -34,6 +36,22 @@ public class EmployeeProjectEntity {
         this.employeeEntity = employeeEntity;
         this.projectEntity = projectEntity;
         this.employeeProjectId = new EmployeeProjectId(employeeEntity.getEmployeeId(), projectEntity.getProjectId());
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+
+        EmployeeProjectEntity that = (EmployeeProjectEntity) o;
+        return  Objects.equals(employeeEntity, that.employeeEntity) &&
+                Objects.equals(projectEntity, that.projectEntity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeEntity, projectEntity);
     }
 
 

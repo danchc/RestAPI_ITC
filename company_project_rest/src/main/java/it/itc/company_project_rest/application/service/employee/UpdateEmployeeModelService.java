@@ -91,26 +91,11 @@ public class UpdateEmployeeModelService implements UpdateEmployeeModelUseCase {
 
     /* Update Employee with new Project in Project List */
     @Override
-    public EmployeeModel updateProjectListEmployeeModel(UpdateProjectListEmployeeModelCommand updateProjectListEmployeeModelCommand) {
+    public void updateProjectListEmployeeModel(UpdateProjectListEmployeeModelCommand updateProjectListEmployeeModelCommand) {
         log.info("### Retrieving EmployeeModel ###");
-        Optional<EmployeeModel> employeeRetrieved =
-                this.getEmployeeModelPortOut.retrieveById(
-                        updateProjectListEmployeeModelCommand.getEmployeeId()
-                );
-
-        if(employeeRetrieved.isPresent()){
-            employeeRetrieved.get().addNewProject(
-                    this.getProjectModelPortOut.retrieveById(
-                            updateProjectListEmployeeModelCommand.getProjectId()
-                    ).orElseThrow(
-                            () -> new ObjectNotFound("### ProjectModel Not Found ###")
-                    )
-            );
-
-
-            return this.updateEmployeeModelPortOut.persist(employeeRetrieved.get());
-        } else {
-            throw new ObjectNotFound("Employee not found.");
-        }
+        this.updateEmployeeModelPortOut.update(
+                updateProjectListEmployeeModelCommand.getEmployeeId(),
+                updateProjectListEmployeeModelCommand.getProjectId()
+        );
     }
 }

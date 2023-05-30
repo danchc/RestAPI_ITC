@@ -1,14 +1,15 @@
 package it.itc.company_project_rest.infrastructure.service.project;
 
-import it.itc.company_project_rest.application.port.out.project.CreateProjectModelPortOut;
-import it.itc.company_project_rest.application.port.out.project.DeleteProjectModelPortOut;
-import it.itc.company_project_rest.application.port.out.project.GetAllProjectModelPortOut;
-import it.itc.company_project_rest.application.port.out.project.GetProjectModelPortOut;
+import it.itc.company_project_rest.application.port.out.project.*;
 import it.itc.company_project_rest.domain.model.department.DepartmentModel;
+import it.itc.company_project_rest.domain.model.employee.EmployeeId;
+import it.itc.company_project_rest.domain.model.exception.ObjectNotFound;
 import it.itc.company_project_rest.domain.model.project.ProjectId;
 import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import it.itc.company_project_rest.infrastructure.entity.department.DepartmentEntity;
+import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
 import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
+import it.itc.company_project_rest.infrastructure.jpa.employee.EmployeeJpaRepository;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
 import it.itc.company_project_rest.infrastructure.jpa.project.ProjectJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectAdapterService implements CreateProjectModelPortOut, GetProjectModelPortOut, DeleteProjectModelPortOut, GetAllProjectModelPortOut {
+public class ProjectAdapterService
+        implements CreateProjectModelPortOut, GetProjectModelPortOut, DeleteProjectModelPortOut, GetAllProjectModelPortOut, UpdateProjectModelPortOut, UpdateProjectModelEmployeePortOut{
 
     private final ProjectJpaRepository projectJpaRepository;
+    private final EmployeeJpaRepository employeeJpaRepository;
 
     private final ProjectMapper projectMapper = new ProjectMapper();
 
@@ -69,4 +72,24 @@ public class ProjectAdapterService implements CreateProjectModelPortOut, GetProj
 
         return new PageImpl<>(projectModelList, pageable, projectEntityPage.getTotalElements());
     }
+    @Override
+    @Transactional
+    public void update(ProjectId projectId, EmployeeId employeeId) {
+
+        EmployeeEntity employeeEntity =
+                this.employeeJpaRepository.findById(employeeId.getEmployeeId()).orElseThrow(
+                        () -> new ObjectNotFound("Employee not found.")
+                );
+
+        ProjectEntity projectEntity =
+                this.projectJpaRepository.findById(projectId.getProjectId()).orElseThrow(
+                        () -> new ObjectNotFound("Project not found.")
+                );
+
+        projectEntity.addEmployee(employeeEntity);
+        this.projectJpaRepository.save(projectEntity);
+
+    }
+
+
 }

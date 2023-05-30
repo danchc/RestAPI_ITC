@@ -43,6 +43,7 @@ public class EmployeeMapper {
                 creo il corrispettivo EmployeeProjectEntity e creo Set<EmployeeProjectEntity>
              */
 
+            /*
             employeeProjectEntities = employeeModel.getProjectModelSet().stream().map(
                     projectModel -> {
                         EmployeeEntity ee = EmployeeEntity.builder()
@@ -60,8 +61,9 @@ public class EmployeeMapper {
                                         .build())
                                 .build();
                     }
-            ).collect(Collectors.toSet());
+            ).collect(Collectors.toSet());*/
         }
+
 
         return EmployeeEntity.builder()
                 .employeeId(employeeModel.getEmployeeId().getEmployeeId())
@@ -69,7 +71,6 @@ public class EmployeeMapper {
                 .name(employeeModel.getName())
                 .surname(employeeModel.getSurname())
                 .departmentEntity(departmentEntity)
-                .projectEntitySet(employeeProjectEntities)
                 .build();
 
     }

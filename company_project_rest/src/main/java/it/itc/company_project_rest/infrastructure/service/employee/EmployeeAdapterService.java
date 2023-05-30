@@ -3,9 +3,16 @@ package it.itc.company_project_rest.infrastructure.service.employee;
 import it.itc.company_project_rest.application.port.out.employee.*;
 import it.itc.company_project_rest.domain.model.employee.EmployeeId;
 import it.itc.company_project_rest.domain.model.employee.EmployeeModel;
+import it.itc.company_project_rest.domain.model.exception.ObjectNotFound;
+import it.itc.company_project_rest.domain.model.project.ProjectId;
+import it.itc.company_project_rest.domain.model.project.ProjectModel;
 import it.itc.company_project_rest.infrastructure.entity.employee.EmployeeEntity;
+import it.itc.company_project_rest.infrastructure.entity.employee_project.EmployeeProjectEntity;
+import it.itc.company_project_rest.infrastructure.entity.project.ProjectEntity;
 import it.itc.company_project_rest.infrastructure.jpa.employee.EmployeeJpaRepository;
 import it.itc.company_project_rest.infrastructure.jpa.mapper.employee.EmployeeMapper;
+import it.itc.company_project_rest.infrastructure.jpa.mapper.project.ProjectMapper;
+import it.itc.company_project_rest.infrastructure.jpa.project.ProjectJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,16 +28,30 @@ import java.util.Optional;
 public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut, DeleteEmployeeModelPortOut, GetAllEmployeeModelPortOut {
 
     private final EmployeeJpaRepository employeeJpaRepository;
+    private final ProjectJpaRepository projectJpaRepository;
     private final EmployeeMapper employeeMapper = new EmployeeMapper();
-
+    private final ProjectMapper projectMapper = new ProjectMapper();
     @Override
     @Transactional
     public EmployeeModel persist(EmployeeModel employeeModel) {
         this.employeeJpaRepository.save(
             this.employeeMapper.fromModelToEntity(employeeModel)
         );
-
         return employeeModel;
+    }
+
+    @Override
+    @Transactional
+    public void update(EmployeeId employeeId, ProjectId projectId) {
+        EmployeeEntity employeeEntity = this.employeeJpaRepository.findById(employeeId.getEmployeeId()).orElseThrow(
+                ()-> new ObjectNotFound("Employee not found")
+        );
+        ProjectEntity projectEntity = this.projectJpaRepository.findById(projectId.getProjectId()).orElseThrow(
+                () -> new ObjectNotFound("Project not found")
+        );
+        employeeEntity.addProject(projectEntity);
+
+        employeeJpaRepository.save(this.employeeJpaRepository.findById(employeeId.getEmployeeId()).get());
     }
 
     @Override
@@ -60,4 +81,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
 
         return new PageImpl<>(employeeModelList, pageable, employeeEntityPage.getTotalElements());
     }
+
+
+
 }
