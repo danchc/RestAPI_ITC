@@ -27,11 +27,11 @@ public class EmployeeEntity {
     private String surname;
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private DepartmentEntity departmentEntity;
 
-    @OneToMany(mappedBy = "employeeEntity", cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "employeeEntity", cascade = CascadeType.ALL,  orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<EmployeeProjectEntity> projectEntitySet = new HashSet<>();
 
     @Builder

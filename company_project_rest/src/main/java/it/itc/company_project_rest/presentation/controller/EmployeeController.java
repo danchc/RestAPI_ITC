@@ -32,6 +32,7 @@ public class EmployeeController {
     private final UpdateEmployeeModelUseCase updateEmployeeModelUseCase;
     private final DeleteEmployeeModelUseCase deleteEmployeeModelUseCase;
     private final GetAllEmployeeModelUseCase getAllEmployeeModelUseCase;
+    private final DeleteEmployeeModelProjectUseCase deleteEmployeeModelProjectUseCase;
 
     private final EmployeeMapper employeeMapper = new EmployeeMapper();
 
@@ -181,6 +182,27 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }
+
+    /*
+        API Delete Project in Employee
+     */
+    @DeleteMapping("/project/{employeeId}")
+    public ResponseEntity<Void> deleteProject(@PathVariable UUID employeeId, @RequestBody EmployeeProjectRequest employeeProjectRequest){
+        log.info("### Deleting Project in Employee ###");
+        log.debug("### Requested Delete Project in Employee {}", employeeId);
+
+        this.deleteEmployeeModelProjectUseCase.deleteProject(
+                new DeleteEmployeeModelProjectCommand(
+                        new EmployeeId(employeeId),
+                        new ProjectId(employeeProjectRequest.getProjectId())
+                )
+        );
+
+        return new ResponseEntity<>(
+                HttpStatus.OK
+        );
+    }
+
 
 
 }

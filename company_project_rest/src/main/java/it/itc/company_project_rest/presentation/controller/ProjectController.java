@@ -41,6 +41,7 @@ public class ProjectController {
     private final GetAllProjectModelUseCase getAllProjectModelUseCase;
     private final UpdateProjectModelUseCase updateProjectModelUseCase;
     private final UpdateProjectModelEmployeeUseCase updateProjectModelEmployeeUseCase;
+    private final DeleteProjectModelEmployeeUseCase deleteProjectModelEmployeeUseCase;
 
     private final ProjectMapper projectMapper = new ProjectMapper();
 
@@ -167,5 +168,23 @@ public class ProjectController {
         );
     }
 
+    /* API Remove Employee in Project */
+    @DeleteMapping("/employee/{projectId}")
+    public ResponseEntity<Void> removeEmployee(@PathVariable UUID projectId, @RequestBody ProjectEmployeeRequest projectEmployeeRequest){
+        log.info("### Removing Employee in Project ###");
+        log.debug("### Requested to remove Employee in Project {} ###", projectId);
+
+        this.deleteProjectModelEmployeeUseCase.deleteEmployee(
+                new DeleteProjectModelEmployeeCommand(
+                        new ProjectId(projectId),
+                        new EmployeeId(projectEmployeeRequest.getEmployeeId())
+                )
+        );
+
+
+        return new ResponseEntity<Void>(
+                HttpStatus.OK
+        );
+    }
 
 }

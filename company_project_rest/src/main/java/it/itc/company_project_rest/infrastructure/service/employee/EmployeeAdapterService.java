@@ -25,12 +25,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut, DeleteEmployeeModelPortOut, GetAllEmployeeModelPortOut {
+public class EmployeeAdapterService
+        implements CreateEmployeeModelPortOut, GetEmployeeModelPortOut, UpdateEmployeeModelPortOut,
+        DeleteEmployeeModelPortOut, GetAllEmployeeModelPortOut, DeleteEmployeeModelProjectPortOut {
 
     private final EmployeeJpaRepository employeeJpaRepository;
     private final ProjectJpaRepository projectJpaRepository;
     private final EmployeeMapper employeeMapper = new EmployeeMapper();
-    private final ProjectMapper projectMapper = new ProjectMapper();
+
+    /* save new employee in database */
     @Override
     @Transactional
     public EmployeeModel persist(EmployeeModel employeeModel) {
@@ -40,6 +43,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
         return employeeModel;
     }
 
+    /* add new project in employee */
     @Override
     @Transactional
     public void update(EmployeeId employeeId, ProjectId projectId) {
@@ -54,6 +58,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
         employeeJpaRepository.save(this.employeeJpaRepository.findById(employeeId.getEmployeeId()).get());
     }
 
+    /* get an employee by id */
     @Override
     @Transactional(readOnly = true)
     public Optional<EmployeeModel> retrieveById(EmployeeId employeeId) {
@@ -62,6 +67,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
         ).map(employeeMapper::fromEntityToModel);
     }
 
+    /* delete employee by id */
     @Override
     @Transactional
     public void deleteById(EmployeeId employeeId) {
@@ -71,6 +77,7 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
     }
 
 
+    /* find a page of employees */
     @Override
     @Transactional(readOnly = true)
     public Page<EmployeeModel> findAll(Pageable pageable) {
@@ -83,5 +90,18 @@ public class EmployeeAdapterService implements CreateEmployeeModelPortOut, GetEm
     }
 
 
+    /* deleting project in employee */
+    @Override
+    @Transactional
+    public void deleteProject(EmployeeId employeeId, ProjectId projectId) {
+        EmployeeEntity employeeEntity = this.employeeJpaRepository.findById(employeeId.getEmployeeId()).orElseThrow(
+                ()-> new ObjectNotFound("Employee not found")
+        );
+        ProjectEntity projectEntity = this.projectJpaRepository.findById(projectId.getProjectId()).orElseThrow(
+                () -> new ObjectNotFound("Project not found")
+        );
 
+        employeeEntity.removeProject(projectEntity);
+        this.employeeJpaRepository.save(employeeEntity);
+    }
 }

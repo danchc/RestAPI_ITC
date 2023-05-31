@@ -45,6 +45,7 @@ public class ProjectEntity {
     public void addEmployee(EmployeeEntity employeeEntity){
         EmployeeProjectEntity employeeProjectEntity = new EmployeeProjectEntity(employeeEntity, this);
         this.employeeEntitySet.add(employeeProjectEntity);
+        /* mappedBy pensa ad aggiornare la lista in EmployeeEntity */
         //employeeEntity.getProjectEntitySet().add(employeeProjectEntity);
     }
 

@@ -38,6 +38,7 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
         return departmentModel;
     }
 
+    /* retrieve a department by id */
     @Override
     @Transactional(readOnly = true)
     public Optional<DepartmentModel> retrieveById(DepartmentId departmentId) {
@@ -46,6 +47,7 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
         ).map(departmentMapper::fromEntityToModel);
     }
 
+    /* delete a department by id */
     @Override
     @Transactional
     public void deleteById(DepartmentId departmentId) {
@@ -54,6 +56,7 @@ public class DepartmentAdapterService implements CreateDepartmentModelPortOut, G
         );
     }
 
+    /* retrieve a page of departments */
     @Override
     @Transactional(readOnly = true)
     public Page<DepartmentModel> findAll(Pageable pageable) {

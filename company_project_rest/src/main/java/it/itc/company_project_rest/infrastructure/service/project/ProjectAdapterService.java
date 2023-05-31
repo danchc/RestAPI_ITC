@@ -25,7 +25,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProjectAdapterService
-        implements CreateProjectModelPortOut, GetProjectModelPortOut, DeleteProjectModelPortOut, GetAllProjectModelPortOut, UpdateProjectModelPortOut, UpdateProjectModelEmployeePortOut{
+        implements CreateProjectModelPortOut, GetProjectModelPortOut, DeleteProjectModelPortOut, GetAllProjectModelPortOut, UpdateProjectModelPortOut, UpdateProjectModelEmployeePortOut
+        , DeleteProjectModelEmployeePortOut
+{
 
     private final ProjectJpaRepository projectJpaRepository;
     private final EmployeeJpaRepository employeeJpaRepository;
@@ -51,7 +53,7 @@ public class ProjectAdapterService
         ).map(projectMapper::fromEntityToModel);
     }
 
-
+    /* delete a project by id */
     @Override
     @Transactional
     public void deleteById(ProjectId projectId) {
@@ -60,7 +62,7 @@ public class ProjectAdapterService
         );
     }
 
-
+    /* retrieve a page of projects */
     @Override
     @Transactional(readOnly = true)
     public Page<ProjectModel> findAll(Pageable pageable) {
@@ -72,6 +74,8 @@ public class ProjectAdapterService
 
         return new PageImpl<>(projectModelList, pageable, projectEntityPage.getTotalElements());
     }
+
+    /* add new employee in project */
     @Override
     @Transactional
     public void update(ProjectId projectId, EmployeeId employeeId) {
@@ -92,4 +96,28 @@ public class ProjectAdapterService
     }
 
 
+
+    /* delete employee from project */
+    @Override
+    public void deleteEmployee(ProjectId projectId, EmployeeId employeeId) {
+        /* retrieve ProjectEntity */
+        ProjectEntity projectEntity =
+                this.projectJpaRepository.findById(
+                        projectId.getProjectId()
+                ).orElseThrow(
+                        () -> new ObjectNotFound("Project not found.")
+                );
+
+        /* retrieve EmployeeEntity */
+        EmployeeEntity employeeEntity =
+                this.employeeJpaRepository.findById(
+                        employeeId.getEmployeeId()
+                ).orElseThrow(
+                        () -> new ObjectNotFound("Employee not found.")
+                );
+
+        /* delete Employee in Project */
+        projectEntity.removeEmployee(employeeEntity);
+        this.projectJpaRepository.save(projectEntity);
+    }
 }

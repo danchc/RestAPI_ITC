@@ -22,11 +22,11 @@ public class EmployeeProjectEntity {
     @EmbeddedId
     private EmployeeProjectId employeeProjectId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("employeeId")
     private EmployeeEntity employeeEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("projectId")
     private ProjectEntity projectEntity;
 
